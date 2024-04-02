@@ -1,5 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {DatabaseService} from "./database.service";
+import {EventObject} from "../models/event.model";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import {DatabaseService} from "./database.service";
 export class DalEventService {
   database = inject(DatabaseService);
   constructor() { }
-  insert(event: Event): Promise<any> {
+  insert(event: EventObject): Promise<any> {
     return new Promise((resolve, reject) => {
       const transaction = this.database.db.transaction(["events"], "readwrite");
 

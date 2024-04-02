@@ -1,4 +1,4 @@
-export class Event {
+export class EventObject {
   id: number| undefined
   name: string = "";
   date: string = "";
