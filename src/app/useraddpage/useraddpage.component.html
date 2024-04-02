@@ -1,1 +1,60 @@
-<p>useraddpage works!</p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header text-center">
+      <h1>Create Account</h1>
+    </div>
+    <div class="card-body">
+      <form #userForm="ngForm">
+        <div class="mb-3">
+          <label for="txtFirstName">First Name:</label>
+          <input type="text" class="form-control" id="txtFirstName"
+                 name="txtFirstName"
+                 [(ngModel)]="user.firstName"
+                 #firstName="ngModel">
+        </div>
+
+        <div class="mb-3">
+          <label for="txtLastName">Last Name:</label>
+          <input type="text" class="form-control" id="txtLastName"
+                 name="txtLastName"
+                 [(ngModel)]="user.lastName"
+                 #lastName="ngModel">
+        </div>
+
+        <div class="mb-3">
+          <label for="txtUserName">User Name:</label>
+          <input type="text" class="form-control" id="txtUserName"
+                 name="txtUserName"
+                 [(ngModel)]="user.userName"
+                 #userName="ngModel">
+        </div>
+
+        <div class="mb-3">
+          <label for="txtEmail">Email:</label>
+          <input type="text" class="form-control" id="txtEmail"
+                 name="txtEmail"
+                 [(ngModel)]="user.email"
+                 #email="ngModel">
+        </div>
+
+        <div class="mb-3">
+          <label for="txtDOB">Date of Birth:</label>
+          <input type="date" class="form-control" id="txtDOB"
+                 name="txtDOB"
+                 [(ngModel)]="user.dob"
+                 #dob="ngModel">
+        </div>
+
+        <div class="mb-3">
+          <label for="txtMobileNumber">Mobile Number:</label>
+          <input type="text" class="form-control" id="txtMobileNumber"
+                 name="txtMobileNumber"
+                 [(ngModel)]="user.mobileNumber"
+                 #mobileNumber="ngModel">
+        </div>
+      </form>
+    </div>
+    <div class="card-footer">
+    </div>
+  </div>
+</div>

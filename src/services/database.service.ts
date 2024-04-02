@@ -1,9 +1,115 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {User} from "../models/user.model";
+import {Login} from "../models/login.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
 
-  constructor() { }
+  db: any;
+
+  userTypesData = [
+    {type: 'user'},
+    {type: 'admin'},
+  ];
+
+
+  private createDatabase(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('EventsApp', 1);
+
+      request.onerror = (event) => {
+        console.error('Error in creating database!');
+      }
+
+      request.onsuccess = (event) => {
+        console.log('onsuccess called');
+        console.log(event);
+        // @ts-ignore
+        this.db = event.target.result;
+        resolve(this.db);
+      }
+
+      request.onupgradeneeded = (event) => {
+        console.log('onupgradeneeded called');
+        console.log(event);
+        // @ts-ignore
+        this.db = event.target.result;
+        const userStore = this.db.createObjectStore('users', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+        const eventStore = this.db.createObjectStore('events', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+        const commentStore = this.db.createObjectStore('comments', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+        const loginStore = this.db.createObjectStore('logins', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+        const userTypesStore = this.db.createObjectStore('usertypes', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+
+        this.userTypesData.forEach((item) => {
+          userTypesStore.add(item);
+        });
+
+        userStore.createIndex('userNameIndex', 'userName', {unique: true});
+        userTypesStore.createIndex("typesIndex", "type", {unique: true});
+        loginStore.createIndex('userIdIndex', 'userId', {unique: true});
+
+        // Identify 'admin' object and create default admin user
+        const userTypeRequest = userTypesStore.index('typesIndex').get('admin');
+        userTypeRequest.onsuccess = (event: any) => {
+          const userTypeAdmin = event.target.result;
+          // Create default admin user
+          const defaultAdminUser = new User('admin', 'admin', 'admin', '', '', '', userTypeAdmin.id);
+
+          // Add default admin user to userStore
+          const addUserRequest = userStore.add(defaultAdminUser);
+          addUserRequest.onsuccess = (event: any) => {
+            console.log('Default admin user added successfully');
+            const userRequest = userStore.get(1);
+            userRequest.onsuccess = (event: any) => {
+              const userAdmin = event.target.result;
+
+              const defaultAdminLogin = new Login(userAdmin.id, 'admin');
+
+              const addLoginRequest = loginStore.add(defaultAdminLogin);
+              addLoginRequest.onsuccess = () => {
+                console.log('Default admin login added successfully');
+              }
+              addLoginRequest.onerror = () => {
+                console.error('Default admin login added successfully');
+              }
+
+            }
+
+          };
+          addUserRequest.onerror = () => {
+            console.error('Error adding default admin user');
+          };
+        };
+
+      }
+    })
+  }
+
+  initDatabase() {
+    this.createDatabase().then((data) => {
+      console.log('database created successfully: ' + data);
+    }).catch((err) => {
+      console.log('Error in database creation: ' + err.message);
+    })
+  }
+
+  constructor() {
+  }
 }

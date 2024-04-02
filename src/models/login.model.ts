@@ -1,5 +1,4 @@
-export class login {
-  id: number| undefined;
+export class Login {
   userId: number| undefined;
   pwd: string = "";
 

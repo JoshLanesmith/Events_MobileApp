@@ -6,16 +6,19 @@ export class User {
   dob: string = "";
   email: string = "";
   mobileNumber: string = "";
+  role: number | undefined;
   eventsRegisteredFor: EventReference[] = [];
   eventsHosted: EventReference[] = [];
 
-  constructor(firstName: string, lastName: string, userName: string, dob: string, email: string, mobileNumber: string) {
+  constructor(firstName: string, lastName: string, userName: string, dob: string,
+              email: string, mobileNumber: string, role: number) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.userName = userName;
     this.dob = dob;
     this.email = email;
     this.mobileNumber = mobileNumber;
+    this.role = role;
   }
 }
 

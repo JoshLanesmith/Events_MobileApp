@@ -1,1 +1,29 @@
-<p>loginpage works!</p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header text-center">
+      <h1>Login</h1>
+    </div>
+    <div class="card-body">
+      <form #userForm="ngForm">
+        <div class="mb-3">
+          <label for="txtUserName">User Name:</label>
+          <input type="text" class="form-control" id="txtUserName"
+                 name="txtUserName"
+                 [(ngModel)]="user.userName"
+                 #userName="ngModel">
+        </div>
+
+        <div class="mb-3">
+          <label for="txtPwd">Password:</label>
+          <input type="text" class="form-control" id="txtPwd"
+                 name="txtPwd"
+                 [(ngModel)]="login.pwd"
+                 #pwd="ngModel">
+        </div>
+        <button type="button" id="btnLogin" class="btn btn-primary" (click)="onLoginClick()">Login</button>
+      </form>
+    </div>
+    <div class="card-footer">
+    </div>
+  </div>
+</div>
