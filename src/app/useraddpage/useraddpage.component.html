@@ -1,3 +1,4 @@
+<script src="../../services/dal-user.service.ts"></script>
 <div class="container mt-4">
   <div class="card">
     <div class="card-header text-center">
@@ -6,43 +7,84 @@
     <div class="card-body">
       <form #userForm="ngForm">
         <div class="mb-3">
-          <label for="txtFirstName">First Name:</label>
+          <label for="txtFirstName">First Name:*</label>
           <input type="text" class="form-control" id="txtFirstName"
                  name="txtFirstName"
                  [(ngModel)]="user.firstName"
-                 #firstName="ngModel">
+                 #firstName="ngModel"
+                 required
+          >
+          @if (firstName.invalid && (firstName.touched || firstName.dirty)) {
+            @if (firstName.errors?.['required']){
+              <small class="text-danger">First name is required</small> <br>
+            }
+          }
         </div>
 
         <div class="mb-3">
-          <label for="txtLastName">Last Name:</label>
+          <label for="txtLastName">Last Name:*</label>
           <input type="text" class="form-control" id="txtLastName"
                  name="txtLastName"
                  [(ngModel)]="user.lastName"
-                 #lastName="ngModel">
+                 #lastName="ngModel"
+                 required
+          >
+          @if (lastName.invalid && (lastName.touched || lastName.dirty)) {
+            @if (lastName.errors?.['required']){
+              <small class="text-danger">Last name is required</small> <br>
+            }
+          }
         </div>
 
         <div class="mb-3">
-          <label for="txtUserName">User Name:</label>
+          <label for="txtUserName">Username:*</label>
           <input type="text" class="form-control" id="txtUserName"
                  name="txtUserName"
                  [(ngModel)]="user.userName"
-                 #userName="ngModel">
+                 #userName="ngModel"
+                 required
+                 [minlength]="MIN_LENGTH"
+          >
+          @if (userName.invalid && (userName.touched || userName.dirty)) {
+            @if (userName.errors?.['required']){
+              <small class="text-danger">Username is required</small> <br>
+            } @else if (userName.errors?.['minlength']){
+              <small class="text-danger">Username must be at least {{MIN_LENGTH}} characters long</small> <br>
+            }
+          }
         </div>
 
         <div class="mb-3">
-          <label for="txtEmail">Email:</label>
+          <label for="txtEmail">Email:*</label>
           <input type="text" class="form-control" id="txtEmail"
                  name="txtEmail"
                  [(ngModel)]="user.email"
-                 #email="ngModel">
+                 #email="ngModel"
+                 required
+                 pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          >
+          @if (email.invalid && (email.touched || email.dirty)) {
+            @if (email.errors?.['required']){
+              <small class="text-danger">Email is required</small> <br>
+            } @else if (email.errors?.['pattern']){
+              <small class="text-danger">Invalid email format</small> <br>
+            }
+          }
         </div>
 
         <div class="mb-3">
-          <label for="txtDOB">Date of Birth:</label>
+          <label for="txtDOB">Date of Birth:*</label>
           <input type="date" class="form-control" id="txtDOB"
                  name="txtDOB"
                  [(ngModel)]="user.dob"
-                 #dob="ngModel">
+                 #dob="ngModel"
+                 required
+          >
+          @if (dob.invalid && (dob.touched || dob.dirty)) {
+            @if (dob.errors?.['required']){
+              <small class="text-danger">Date of Birth is required</small> <br>
+            }
+          }
         </div>
 
         <div class="mb-3">
@@ -50,8 +92,52 @@
           <input type="text" class="form-control" id="txtMobileNumber"
                  name="txtMobileNumber"
                  [(ngModel)]="user.mobileNumber"
-                 #mobileNumber="ngModel">
+                 #mobileNumber="ngModel"
+                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          >
+          @if (mobileNumber.invalid && (mobileNumber.touched || mobileNumber.dirty)) {
+            <small class="text-danger">Invalid mobile number  (###-###-####)</small> <br>
+          }
         </div>
+
+        <div class="mb-3">
+          <label for="txtPassword">Password:*</label>
+          <input type="text" class="form-control" id="txtPassword"
+                 name="txtPassword"
+                 [(ngModel)]="pwd"
+                 #password="ngModel"
+                 required
+                 [minlength]="MIN_LENGTH"
+          >
+          @if (password.invalid && (password.touched || password.dirty)) {
+            @if (password.errors?.['required']){
+              <small class="text-danger">Password is required</small> <br>
+            } @else if (password.errors?.['minlength']){
+              <small class="text-danger">Password must be at least {{MIN_LENGTH}} characters long</small> <br>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtConfirmPassword">Confirm Password:*</label>
+          <input type="text" class="form-control" id="txtConfirmPassword"
+                 name="txtConfirmPassword"
+                 [(ngModel)]="confirmPwd"
+                 #confirmPassword="ngModel"
+                 required
+                 ngValidateEqual="txtPassword"
+          >
+          @if (confirmPassword.invalid && (confirmPassword.touched || confirmPassword.dirty)) {
+            @if (confirmPassword.errors?.['required']){
+              <small class="text-danger">Confirm Password is required</small> <br>
+            } @else if (confirmPassword.errors?.['notEqual']) {
+              <small class="text-danger">Passwords do not match</small> <br>
+            }
+          }
+        </div>
+        <button type="button" id="btnLogin" class="btn btn-primary"
+                [disabled]="userForm.invalid || pwd !== confirmPwd"
+                (click)="onCreateAccountClick()">Create Account</button>
       </form>
     </div>
     <div class="card-footer">

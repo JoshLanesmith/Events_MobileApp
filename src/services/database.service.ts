@@ -25,7 +25,6 @@ export class DatabaseService {
 
       request.onsuccess = (event) => {
         console.log('onsuccess called');
-        console.log(event);
         // @ts-ignore
         this.db = event.target.result;
         resolve(this.db);
@@ -75,29 +74,21 @@ export class DatabaseService {
           // Add default admin user to userStore
           const addUserRequest = userStore.add(defaultAdminUser);
           addUserRequest.onsuccess = (event: any) => {
-            console.log('Default admin user added successfully');
-            const userRequest = userStore.get(1);
-            userRequest.onsuccess = (event: any) => {
-              const userAdmin = event.target.result;
+            const userAdminId = event.target.result;
+            const defaultAdminLogin = new Login(userAdminId, 'admin');
 
-              const defaultAdminLogin = new Login(userAdmin.id, 'admin');
-
-              const addLoginRequest = loginStore.add(defaultAdminLogin);
-              addLoginRequest.onsuccess = () => {
-                console.log('Default admin login added successfully');
-              }
-              addLoginRequest.onerror = () => {
-                console.error('Default admin login added successfully');
-              }
-
+            const addLoginRequest = loginStore.add(defaultAdminLogin);
+            addLoginRequest.onsuccess = () => {
+              console.log('Default admin login added successfully');
             }
-
-          };
+            addLoginRequest.onerror = () => {
+              console.error('Default admin login added successfully');
+            }
+          }
           addUserRequest.onerror = () => {
             console.error('Error adding default admin user');
-          };
-        };
-
+          }
+        }
       }
     })
   }
