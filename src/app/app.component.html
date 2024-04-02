@@ -1,4 +1,8 @@
-<h1>Angular Bootstrap Template</h1>
-<h3>replace this text with actual content</h3>
-
-<router-outlet></router-outlet>
+<div class="m-4">
+  @if (isLoggedIn) {
+    <app-navloggedin></app-navloggedin>
+  } @else {
+    <app-navpublic></app-navpublic>
+  }
+  <router-outlet></router-outlet>
+</div>
