@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Router, NavigationEnd} from '@angular/router';
+import {Router, NavigationEnd, RouterOutlet} from '@angular/router';
 import {SessionUtilService} from "../services/session-util.service";
 import {NavloggedinComponent} from "./navloggedin/navloggedin.component";
 import {NavpublicComponent} from "./navpublic/navpublic.component";
@@ -9,7 +9,7 @@ import {DatabaseService} from "../services/database.service";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NavloggedinComponent, NavpublicComponent],
+  imports: [CommonModule, NavloggedinComponent, NavpublicComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -30,6 +30,7 @@ export class AppComponent {
     // Subscribe to router events
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        console.log('event subscription triggered')
         // Check if user is logged in
         this.isLoggedIn = this.sessionUtil.getLoginSessionValue(); // Adjust this according to your session service
       }

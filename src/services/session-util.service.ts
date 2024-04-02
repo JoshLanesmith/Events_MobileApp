@@ -53,6 +53,11 @@ export class SessionUtilService {
 
   }
 
+  logUserOut() {
+    sessionStorage.setItem('loggedIn', `false`);
+    sessionStorage.removeItem('userName');
+  }
+
   constructor() {
     this.initLoginSessionValue();
   }

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Component, inject} from '@angular/core';
+import {Router, RouterLink} from "@angular/router";
+import {SessionUtilService} from "../../services/session-util.service";
 
 @Component({
   selector: 'app-navloggedin',
@@ -12,5 +13,13 @@ import {RouterLink} from "@angular/router";
 })
 export class NavloggedinComponent {
   title: string = "Events App";
+  sessionUtil = inject(SessionUtilService);
 
+  constructor(private router: Router) {
+  }
+
+  onLogoutClick() {
+    this.sessionUtil.logUserOut();
+    this.router.navigate(['/login']);
+  }
 }
