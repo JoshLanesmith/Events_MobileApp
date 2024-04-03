@@ -24,6 +24,8 @@ export class LoginpageComponent {
   loginDal = inject(DalLoginService);
   sessionUtil = inject(SessionUtilService);
 
+  showFailedLoginMessage: boolean = false;
+
   constructor(private router: Router) {
   }
 
@@ -31,11 +33,14 @@ export class LoginpageComponent {
     this.sessionUtil.logUserIn(this.user.userName, this.login.pwd)
       .then((data) => {
         let isLoggedIn = data;
+        this.showFailedLoginMessage = isLoggedIn;
+
         if (isLoggedIn) {
           this.router.navigate(['/events']);
         }
       })
       .catch((err) => {
+        this.showFailedLoginMessage = true;
       })
   }
 }
