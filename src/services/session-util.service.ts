@@ -17,11 +17,15 @@ export class SessionUtilService {
     return sessionStorage.getItem('loggedIn') === 'true' ? true : false;
   }
 
+  getLoggedInUserID(): number {
+    return Number(sessionStorage.getItem('userId'));
+  }
+
   logUserIn(userName: string, pwd: string): Promise<any> {
     return new Promise((resolve, reject) => {
       let userLoggedIn: boolean = false;
 
-      this.userDal.select(userName)
+      this.userDal.selectByUsername(userName)
         .then((data) => {
           this.user = data;
 
@@ -34,6 +38,7 @@ export class SessionUtilService {
           if (this.login.pwd === pwd && pwd.length >= 5) {
             userLoggedIn = true;
             sessionStorage.setItem('userName', userName);
+            sessionStorage.setItem('userId', `${this.user.id}`);
 
           } else {
             userLoggedIn = false;
@@ -56,6 +61,7 @@ export class SessionUtilService {
   logUserOut() {
     sessionStorage.setItem('loggedIn', `false`);
     sessionStorage.removeItem('userName');
+    sessionStorage.removeItem('userId');
   }
 
   constructor() {

@@ -14,12 +14,16 @@ import {SessionUtilService} from "../../services/session-util.service";
 export class NavloggedinComponent {
   title: string = "Events App";
   sessionUtil = inject(SessionUtilService);
+  userId: number;
 
   constructor(private router: Router) {
+    this.userId = this.sessionUtil.getLoggedInUserID();
   }
 
   onLogoutClick() {
     this.sessionUtil.logUserOut();
     this.router.navigate(['/login']);
   }
+
+
 }

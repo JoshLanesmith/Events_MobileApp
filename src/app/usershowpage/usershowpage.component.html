@@ -1,1 +1,16 @@
-<p>usershowpage works!</p>
+<div class="container mt-3">
+  <h1>User Profile</h1>
+  <div class="card">
+    <div class="card-body">
+      <p><strong>Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
+      <p><strong>Username:</strong> {{ user.userName }}</p>
+      <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Mobile Number:</strong> {{ user.mobileNumber }}</p>
+      <!-- Display more user information as needed -->
+    </div>
+    <div class="card-footer text-center">
+      <button class="btn btn-primary" (click)="onEditProfileClick()">Edit Profile</button>
+    </div>
+  </div>
+</div>
