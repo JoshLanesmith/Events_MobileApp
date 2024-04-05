@@ -13,7 +13,7 @@ export class DalUserService {
   }
 
   insert(user: User, pwd: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(['users', 'logins'], 'readwrite');
       transaction.oncomplete = (event: any) => {
         console.log("Success: insert user and login transaction successful");
@@ -45,7 +45,7 @@ export class DalUserService {
   }
 
   selectByUsername(userName: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(['users'], 'readonly');
       transaction.oncomplete = (event: any) => {
         console.log("Success: select user transaction successful");
@@ -68,7 +68,7 @@ export class DalUserService {
   }
 
   selectById(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(['users'], 'readonly');
       transaction.oncomplete = (event: any) => {
         console.log("Success: select user transaction successful");
@@ -87,6 +87,30 @@ export class DalUserService {
         console.log("Error: error in select user: " + event);
         reject(event);
       };
+    })
+  }
+
+  update(user: User): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['users'], 'readwrite');
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: update user transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in update user transaction: " + event);
+      };
+
+      const userStore = transaction.objectStore('users');
+
+      const req = userStore.put(user);
+      req.onsuccess = (event: any) => {
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      req.onerror = (event: any) => {
+        console.log("Error: error in update user: " + event);
+        reject(event);
+      };
+
     })
   }
 }

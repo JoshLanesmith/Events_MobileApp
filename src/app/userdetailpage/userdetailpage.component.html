@@ -1,1 +1,111 @@
-<p>userdetailpage works!</p>
+<script src="../../services/dal-user.service.ts"></script>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header text-center">
+      <h1>Update Account</h1>
+    </div>
+    <div class="card-body">
+      <form #userForm="ngForm">
+        <div class="mb-3">
+          <label for="txtFirstName">First Name:*</label>
+          <input type="text" class="form-control" id="txtFirstName"
+                 name="txtFirstName"
+                 [(ngModel)]="user.firstName"
+                 #firstName="ngModel"
+                 required
+          >
+          @if (firstName.invalid && (firstName.touched || firstName.dirty)) {
+            @if (firstName.errors?.['required']){
+              <small class="text-danger">First name is required</small> <br>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtLastName">Last Name:*</label>
+          <input type="text" class="form-control" id="txtLastName"
+                 name="txtLastName"
+                 [(ngModel)]="user.lastName"
+                 #lastName="ngModel"
+                 required
+          >
+          @if (lastName.invalid && (lastName.touched || lastName.dirty)) {
+            @if (lastName.errors?.['required']){
+              <small class="text-danger">Last name is required</small> <br>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtUserName">Username:*</label>
+          <input type="text" class="form-control" id="txtUserName"
+                 name="txtUserName"
+                 [(ngModel)]="user.userName"
+                 #userName="ngModel"
+                 required
+                 [minlength]="MIN_LENGTH"
+          >
+          @if (userName.invalid && (userName.touched || userName.dirty)) {
+            @if (userName.errors?.['required']){
+              <small class="text-danger">Username is required</small> <br>
+            } @else if (userName.errors?.['minlength']){
+              <small class="text-danger">Username must be at least {{MIN_LENGTH}} characters long</small> <br>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtEmail">Email:*</label>
+          <input type="text" class="form-control" id="txtEmail"
+                 name="txtEmail"
+                 [(ngModel)]="user.email"
+                 #email="ngModel"
+                 required
+                 pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          >
+          @if (email.invalid && (email.touched || email.dirty)) {
+            @if (email.errors?.['required']){
+              <small class="text-danger">Email is required</small> <br>
+            } @else if (email.errors?.['pattern']){
+              <small class="text-danger">Invalid email format</small> <br>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtDOB">Date of Birth:*</label>
+          <input type="date" class="form-control" id="txtDOB"
+                 name="txtDOB"
+                 [(ngModel)]="user.dob"
+                 #dob="ngModel"
+                 required
+          >
+          @if (dob.invalid && (dob.touched || dob.dirty)) {
+            @if (dob.errors?.['required']){
+              <small class="text-danger">Date of Birth is required</small> <br>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtMobileNumber">Mobile Number:</label>
+          <input type="text" class="form-control" id="txtMobileNumber"
+                 name="txtMobileNumber"
+                 [(ngModel)]="user.mobileNumber"
+                 #mobileNumber="ngModel"
+                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          >
+          @if (mobileNumber.invalid && (mobileNumber.touched || mobileNumber.dirty)) {
+            <small class="text-danger">Invalid mobile number  (###-###-####)</small> <br>
+          }
+        </div>
+
+        <button type="button" id="btnLogin" class="btn btn-primary"
+                [disabled]="userForm.invalid"
+                (click)="onUpdateAccountClick()">Update Account</button>
+      </form>
+    </div>
+    <div class="card-footer">
+    </div>
+  </div>
+</div>

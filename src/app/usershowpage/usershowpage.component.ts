@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {User} from "../../models/user.model";
 import {SessionUtilService} from "../../services/session-util.service";
 import {DalUserService} from "../../services/dal-user.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-usershowpage',
@@ -12,13 +12,15 @@ import {Router} from "@angular/router";
   styleUrl: './usershowpage.component.css'
 })
 export class UsershowpageComponent {
+  userId: number;
   user: User = new User("", "", "", "", "", "", 1);
   sessionUtil = inject(SessionUtilService);
   userDal = inject(DalUserService);
+  activatedRoute = inject(ActivatedRoute);
 
   constructor(private router: Router) {
-    let userId: number = this.sessionUtil.getLoggedInUserID();
-    this.userDal.selectById(userId)
+    this.userId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
+    this.userDal.selectById(this.userId)
       .then((data) => {
         this.user = data;
       })
@@ -29,6 +31,6 @@ export class UsershowpageComponent {
   }
 
   onEditProfileClick() {
-    this.router.navigate([`/user/${this.user.id}/detail`]);
+    this.router.navigate([`/user/${this.userId}/detail`]);
   }
 }
