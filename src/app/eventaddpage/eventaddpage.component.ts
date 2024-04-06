@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {DalEventService} from "../../services/dal-event.service";
 import {FormsModule} from "@angular/forms";
-import {JsonPipe} from "@angular/common";
+import {formatDate, JsonPipe} from "@angular/common";
 import {EventObject} from "../../models/event.model";
 
 @Component({
@@ -15,7 +15,9 @@ import {EventObject} from "../../models/event.model";
   styleUrl: './eventaddpage.component.css'
 })
 export class EventaddpageComponent {
-  event: EventObject = new EventObject("", "02/04/2024", "", "", 0, 0, 0);
+  currentDate: Date = new Date();
+  dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
+  event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, 0);
 
   dal = inject(DalEventService)
 
