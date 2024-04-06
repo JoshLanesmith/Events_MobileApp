@@ -15,11 +15,14 @@ export class DalUserService {
   insert(user: User, pwd: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(['users', 'logins'], 'readwrite');
+
       transaction.oncomplete = (event: any) => {
-        console.log("Success: insert user and login transaction successful");
+        console.log("Success: insert user transaction successful")
+        event.target.result ? resolve(event.target.result) : resolve(null);
       };
       transaction.onerror = (event: any) => {
-        console.log("Error: error in insert user and login transaction: " + event);
+        console.log("Error: error in insert user transaction: " + event);
+        reject(event);
       };
 
       const userStore = transaction.objectStore('users');
@@ -31,15 +34,6 @@ export class DalUserService {
         const login: Login = new Login(Number(event.target.result), pwd);
         loginStore.add(login);
       }
-
-      transaction.oncomplete = (event: any) => {
-        console.log("Success: insert user transaction successful")
-        event.target.result ? resolve(event.target.result) : resolve(null);
-      };
-      transaction.onerror = (event: any) => {
-        console.log("Error: error in insert user transaction: " + event);
-        reject(event);
-      };
 
     })
   }
@@ -111,6 +105,46 @@ export class DalUserService {
         reject(event);
       };
 
+    })
+  }
+
+  delete(user: User): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['users', 'logins'], 'readwrite');
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: delete user transaction successful")
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in delete user transaction: " + event);
+        reject(event);
+      };
+
+      const userStore = transaction.objectStore('users');
+      const loginStore = transaction.objectStore('logins');
+
+      console.log('about to attempt to delete user');
+
+      if (user.id) {
+        const userReq = userStore.delete(user.id);
+
+        console.log('user deleted');
+
+        userReq.onsuccess = (event: any) => {
+          let loginReq = loginStore.index('userIdIndex').get(user.id);
+          console.log('user deleted and got login')
+
+          loginReq.onsuccess = (event: any) => {
+            let login = event.target.result;
+
+            loginStore.delete(login.id);
+          }
+        }
+      }
+      else{
+        reject("user does not have id")
+      }
     })
   }
 }

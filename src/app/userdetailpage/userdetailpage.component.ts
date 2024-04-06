@@ -39,7 +39,7 @@ export class UserdetailpageComponent {
       })
   }
 
-  onUpdateAccountClick() {
+  onUpdateUserClick() {
     this.userDal.update(this.user)
       .then((data) => {
         alert("update successful");
@@ -49,5 +49,28 @@ export class UserdetailpageComponent {
         alert("update unsuccessful");
         this.router.navigate([`/user/${this.userId}/profile`])
       })
+  }
+
+  onDeleteUserClick() {
+    let result = confirm("Are you sure you want to delete your account?")
+
+    if (result) {
+      console.log(this.user);
+      this.userDal.delete(this.user)
+        .then((data) => {
+          this.sessionUtil.logUserOut();
+          this.router.navigate([`/home`]);
+        })
+        .catch((err) => {
+          console.log('user did not delete successfully');
+          console.log(err);
+
+        })
+    }
+
+  }
+
+  onCandelUpdateUserClick() {
+    this.router.navigate([`/user/${this.userId}/profile`])
   }
 }

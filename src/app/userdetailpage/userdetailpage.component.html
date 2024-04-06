@@ -15,7 +15,7 @@
                  required
           >
           @if (firstName.invalid && (firstName.touched || firstName.dirty)) {
-            @if (firstName.errors?.['required']){
+            @if (firstName.errors?.['required']) {
               <small class="text-danger">First name is required</small> <br>
             }
           }
@@ -30,7 +30,7 @@
                  required
           >
           @if (lastName.invalid && (lastName.touched || lastName.dirty)) {
-            @if (lastName.errors?.['required']){
+            @if (lastName.errors?.['required']) {
               <small class="text-danger">Last name is required</small> <br>
             }
           }
@@ -46,10 +46,10 @@
                  [minlength]="MIN_LENGTH"
           >
           @if (userName.invalid && (userName.touched || userName.dirty)) {
-            @if (userName.errors?.['required']){
+            @if (userName.errors?.['required']) {
               <small class="text-danger">Username is required</small> <br>
-            } @else if (userName.errors?.['minlength']){
-              <small class="text-danger">Username must be at least {{MIN_LENGTH}} characters long</small> <br>
+            } @else if (userName.errors?.['minlength']) {
+              <small class="text-danger">Username must be at least {{ MIN_LENGTH }} characters long</small> <br>
             }
           }
         </div>
@@ -64,9 +64,9 @@
                  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
           >
           @if (email.invalid && (email.touched || email.dirty)) {
-            @if (email.errors?.['required']){
+            @if (email.errors?.['required']) {
               <small class="text-danger">Email is required</small> <br>
-            } @else if (email.errors?.['pattern']){
+            } @else if (email.errors?.['pattern']) {
               <small class="text-danger">Invalid email format</small> <br>
             }
           }
@@ -81,7 +81,7 @@
                  required
           >
           @if (dob.invalid && (dob.touched || dob.dirty)) {
-            @if (dob.errors?.['required']){
+            @if (dob.errors?.['required']) {
               <small class="text-danger">Date of Birth is required</small> <br>
             }
           }
@@ -96,16 +96,27 @@
                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           >
           @if (mobileNumber.invalid && (mobileNumber.touched || mobileNumber.dirty)) {
-            <small class="text-danger">Invalid mobile number  (###-###-####)</small> <br>
+            <small class="text-danger">Invalid mobile number (###-###-####)</small> <br>
           }
         </div>
-
-        <button type="button" id="btnLogin" class="btn btn-primary"
-                [disabled]="userForm.invalid"
-                (click)="onUpdateAccountClick()">Update Account</button>
       </form>
     </div>
-    <div class="card-footer">
+    <div class="card-footer text-center">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" id="btnUpdateUser" class="btn btn-primary"
+                [disabled]="userForm.invalid"
+                (click)="onUpdateUserClick()">Update
+        </button>
+        <button type="button" id="btnCandelUpdate" class="btn btn-secondary"
+                [disabled]="userForm.invalid"
+                (click)="onCandelUpdateUserClick()">Update
+        </button>
+
+        <button type="button" id="btnDeleteUser" class="btn btn-danger"
+                [disabled]="userForm.invalid"
+                (click)="onDeleteUserClick()">Delete
+        </button>
+      </div>
     </div>
   </div>
 </div>
