@@ -9,6 +9,10 @@
       <p><strong>Location: </strong>{{event.location}}</p>
       <p><strong>Description: </strong>{{event.description}}</p>
       <p><strong>Capacity: </strong>{{event.capacity}}</p>
+      <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
+              (click)="onModifyClick(event)">
+        Modify
+      </button>
     </div>
   </div>
 </div>

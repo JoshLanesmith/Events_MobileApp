@@ -30,13 +30,9 @@ export class EventslistpageComponent {
     })
   }
 
-  onDetailsClick(event: EventObject) {
+  onShowClick(event: EventObject) {
     console.log(event);
     this.router.navigate([`/event/${event.id}`]);
-  }
-
-  onModifyClick(event: EventObject) {
-    this.router.navigate([`/detail/${event.id}`]);
   }
 
   onDeleteClick(event: EventObject) {

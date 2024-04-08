@@ -27,7 +27,7 @@ export class EventshowpageComponent {
   dal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
-  private router: any;
+  router = inject(Router)
 
   constructor() {
     this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
@@ -40,15 +40,7 @@ export class EventshowpageComponent {
         this.router.navigate(['/error']);
       })
   }
-
-  onUpdateClick() {
-    this.dal.update(this.event)
-      .then((data) => {
-        console.log(data);
-        alert("Record updated successfully");
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+  onModifyClick(event: EventObject) {
+    this.router.navigate([`/event/detail/${event.id}`]);
   }
 }

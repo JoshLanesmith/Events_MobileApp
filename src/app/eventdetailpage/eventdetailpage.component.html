@@ -1,1 +1,65 @@
-<p>Event detail works!</p>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Add an event</h2>
+    </div>
+    <div class="card-body">
+      <form #eventForm="ngForm">
+        <div class="mb-3">
+          <label for="txtName">Name</label>
+          <input id="txtName" type="text" class="form-control"
+                 name="txtName" value="{{event.name}}"
+                 [(ngModel)]="event.name"
+                 #name="ngModel"
+          >
+        </div>
+
+        <div class="mb-3">
+          <label for="txtDate">Date</label>
+          <input id="txtDate" type="date" class="form-control"
+                 name="txtDate" value="{{event.date}}"
+                 [(ngModel)]="event.date"
+                 #date="ngModel"
+
+          >
+        </div>
+
+        <div class="mb-3">
+          <label for="txtLocation">Location</label>
+          <input id="txtLocation" type="text" class="form-control"
+                 name="txtLocation" value="{{event.location}}"
+                 [(ngModel)]="event.location"
+                 #date="ngModel"
+
+          >
+        </div>
+
+        <div class="mb-3">
+          <label for="txtDescription">Description</label>
+          <input id="txtDescription" type="text" class="form-control"
+                 name="txtDescription" value="{{event.description}}"
+                 [(ngModel)]="event.description"
+                 #date="ngModel"
+
+          >
+        </div>
+
+        <div class="mb-3">
+          <label for="capacity">Capacity</label>
+          <input id="capacity" type="text" class="form-control"
+                 name="capacity" value="{{event.capacity}}"
+                 [(ngModel)]="event.capacity"
+                 #date="ngModel"
+
+          >
+        </div>
+
+        <button type="button" id="btnAdd" class="btn btn-primary" (click)="onUpdateClick()">Update</button>
+      </form>
+    </div>
+    <!--    <div class="card-footer">-->
+    <!--      Form values: {{eventForm.value | json}}-->
+    <!--    </div>-->
+  </div>
+</div>
+
