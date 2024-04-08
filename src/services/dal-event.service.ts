@@ -80,7 +80,7 @@ export class DalEventService {
   }
   select(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      const transaction = this.database.db.transaction(["books"]); //readonly
+      const transaction = this.database.db.transaction(["events"]); //readonly
 
       transaction.oncomplete = (event: any) => {
         console.log("Success: select transaction successful");
@@ -89,7 +89,7 @@ export class DalEventService {
         console.log("Error: error in select transaction: " + event);
       };
 
-      const friendsStore = transaction.objectStore("books");
+      const friendsStore = transaction.objectStore("events");
 
       const req = friendsStore.get(id);
       req.onsuccess = (event: any) => {
