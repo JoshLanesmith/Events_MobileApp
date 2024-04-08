@@ -30,6 +30,10 @@ export class EventslistpageComponent {
     })
   }
 
+  onDetailsClick(event: EventObject) {
+    this.router.navigate([`/detail/${event.id}`]);
+  }
+
   onModifyClick(event: EventObject) {
     this.router.navigate([`/detail/${event.id}`]);
   }
@@ -46,4 +50,5 @@ export class EventslistpageComponent {
       })
   }
 
+  protected readonly onselect = onselect;
 }
