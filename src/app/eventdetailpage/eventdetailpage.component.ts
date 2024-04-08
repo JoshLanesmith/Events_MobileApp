@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {EventObject} from "../../models/event.model";
 import {DalEventService} from "../../services/dal-event.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {formatDate, JsonPipe} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SessionUtilService} from "../../services/session-util.service";
@@ -25,6 +25,7 @@ export class EventdetailpageComponent {
   dal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
+  router = inject(Router)
 
   constructor() {
     this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
@@ -41,6 +42,8 @@ export class EventdetailpageComponent {
       .then((data) => {
         console.log(data);
         alert("Record updated successfully");
+        this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
+        this.router.navigate([`/event/${this.eventId}`]);
       })
       .catch((err) => {
         console.log(err);
