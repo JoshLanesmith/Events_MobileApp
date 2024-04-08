@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.alexjosh.eventhorizon" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Event Horizon</name>
+    <description>Find events in your area to attend</description>
+    <author email="aphilippopoulos3913@conestogac.on.ca, jlanesmith5373@conestogac.on.ca" href="#">
+        Alex Philippopoulos, Josh Lanesmith
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <platform name="android">
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="splash.png"/>
+        <preference name="AndroidWindowSplashScreenBackground" value="#000000" />
+        <preference name="SplashScreenDelay" value="1000"/>
+    </platform>
+    <icon src="icon.png" />
+</widget>

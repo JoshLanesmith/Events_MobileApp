@@ -78,6 +78,57 @@ export class DalEventService {
 
     });
   }
+  select(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.db.transaction(["books"]); //readonly
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: select transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in select transaction: " + event);
+      };
+
+      const friendsStore = transaction.objectStore("books");
+
+      const req = friendsStore.get(id);
+      req.onsuccess = (event: any) => {
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      req.onerror = (event: any) => {
+        console.log("Error: error in select: " + event);
+        reject(event);
+      };
+    });
+
+  }
+  update(event: EventObject): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.db.transaction(["events"], "readwrite");
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: update transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in update transaction: " + event);
+      };
+
+      const eventStore = transaction.objectStore("events");
+
+      const reqUpdate = eventStore.put(event);
+
+      reqUpdate.onsuccess = (event: any) => {
+        console.log(`Success: data updated successfully: ${event}`);
+        resolve(event);
+      };
+
+      reqUpdate.onerror = (event: any) => {
+        console.log(`Error: failed to update: ${event}`);
+        reject(event)
+      };
+    });
+  }
+
 
   delete(event: EventObject): Promise<any> {
     return new Promise((resolve, reject) => {
