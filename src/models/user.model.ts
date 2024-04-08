@@ -2,6 +2,7 @@ export class User {
   id: number| undefined;
   firstName: string = "";
   lastName: string = "";
+  profileImg: any;
   userName: string = "";
   dob: string = "";
   email: string = "";
