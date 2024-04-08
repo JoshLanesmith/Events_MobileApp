@@ -2,6 +2,7 @@
   <h1>User Profile</h1>
   <div class="card">
     <div class="card-body">
+      <img [src]="user.profileImg" width="80%" alt="Image placeholder">
       <p><strong>Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
       <p><strong>Username:</strong> {{ user.userName }}</p>
       <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
