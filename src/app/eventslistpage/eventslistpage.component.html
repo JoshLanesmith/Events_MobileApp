@@ -1,1 +1,32 @@
-<p>eventslistpage works!</p>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>List of events</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        @for (event of events;track $index) {
+          <li class="list-group-item">
+            {{ event.name }}
+            {{ event.date }}
+            {{ event.location }}
+            <!--<button type="button" id="btnModify" class="btn btn-primary btn-sm me-4"
+                    (click)="onModifyClick(event)">
+              Modify
+            </button>
+
+            <button type="button" id="btnDelete" class="btn btn-danger btn-sm me-4"
+                    (click)="onDeleteClick(event)">
+              Delete
+            </button>-->
+          </li>
+        } @empty {
+          <h4>No books found</h4>
+        }
+      </ul>
+    </div>
+    <div class="card-footer">
+
+    </div>
+  </div>
+</div>

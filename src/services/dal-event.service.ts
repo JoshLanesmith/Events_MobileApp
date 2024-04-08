@@ -34,4 +34,77 @@ export class DalEventService {
       };
     });
   }
+  selectAll(): Promise<EventObject[]> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.db.transaction(["events"]);
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: selectAll transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in selectAll transaction: " + event);
+      };
+
+      const eventStore = transaction.objectStore("events");
+
+      //Preferred way..
+      //             const friendCursor = friendsStore.openCursor();
+      //
+      //             let books: Book[] = [];
+      //             friendCursor.onsuccess = (event: any) => {
+      //                 const cursor = event.target.result;
+      //                 // console.log(cursor);
+      //                 if (cursor) {
+      //                     // console.log(`Name ${cursor.key} is ${cursor.value.name}`);
+      //                     books.push(cursor.value);
+      //                     cursor.continue();
+      //                 } else {
+      //                     // console.log("No more entries!");
+      //                     resolve(books);
+      //                 }
+      //             };
+
+      //also works.. (easy way)
+
+      const req = eventStore.getAll();
+      req.onsuccess = (event: any) => {
+        resolve(event.target.result);
+      };
+      req.onerror = (event: any) => {
+        console.log("Error: error in select: " + event);
+        reject(event);
+      };
+
+
+    });
+  }
+
+  delete(event: EventObject): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.db.transaction(["events"], "readwrite");
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: delete transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in delete transaction: " + event);
+      };
+
+      const eventStore = transaction.objectStore("event");
+      if (event.id) {
+        const reqDelete = eventStore.delete(event.id);
+        reqDelete.onsuccess = (event: any) => {
+          console.log(`Success: data deleted successfully: ${event}`);
+          resolve(event);
+        };
+        reqDelete.onerror = (event: any) => {
+          console.log(`Error: failed to delete: ${event}`);
+          reject(event);
+        };
+      } else {
+        reject("book does not have id")
+      }
+
+    });
+  }
 }
