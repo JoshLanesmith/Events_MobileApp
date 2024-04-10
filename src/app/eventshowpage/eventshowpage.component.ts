@@ -27,7 +27,9 @@ export class EventshowpageComponent {
   currentDate: Date = new Date();
   dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
   event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, 0);
-  position: any;
+  distance: number = 0;
+  destination: any;
+  currentLocation: any;
 
   dal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
@@ -43,8 +45,16 @@ export class EventshowpageComponent {
         return this.geoService.getLocationByAddress(this.event.location);
       })
       .then((data) => {
-        this.position = data[0].position;
-        this.showMap();
+        this.destination = data[0].position;
+        this.showMap('mapContainer', this.destination);
+        return this.geoService.getCurrentLocation();
+      })
+      .then((data) => {
+        this.currentLocation = data;
+        return this.geoService.getRoute('fast', 'car', this.currentLocation, this.destination);
+      })
+      .then((data) => {
+        this.distance = data[0].sections[0].summary.length / 1000;
       })
       .catch((err)=>{
         console.log(err);
@@ -55,9 +65,9 @@ export class EventshowpageComponent {
     this.router.navigate([`/event/detail/${event.id}`]);
   }
 
-  public showMap() {
+  public showMap(elementId: string, location: any) {
     console.log("showing map: ")
-    document.getElementById('mapContainer')!.innerHTML = '';
+    document.getElementById(elementId)!.innerHTML = '';
 
     // Initialize the platform object:
     var platform = this.geoService.hMapPlatform;
@@ -68,7 +78,7 @@ export class EventshowpageComponent {
     var options = {
       zoom: 15,
       center: {
-        lat: this.position.lat, lng: this.position.lng
+        lat: location.lat, lng: location.lng
       }
     };
 
@@ -81,7 +91,7 @@ export class EventshowpageComponent {
 
     var icon = new H.map.Icon('assets/img/map-pin.png');
     var marker = new H.map.Marker({
-      lat: this.position.lat, lng: this.position.lng
+      lat: location.lat, lng: location.lng
     }, {icon: icon});
 
     // Add the marker to the map and center the map at the location of the marker:
