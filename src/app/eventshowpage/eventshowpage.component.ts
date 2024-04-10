@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/user.model";
 import {SessionUtilService} from "../../services/session-util.service";
 import {DalUserService} from "../../services/dal-user.service";
+import {GeoService} from "../../services/geo.service";
 
 @Component({
   selector: 'app-eventshowpage',
@@ -27,13 +28,18 @@ export class EventshowpageComponent {
   dal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
-  router = inject(Router)
+  router = inject(Router);
+  geoService = inject(GeoService);
 
   constructor() {
     this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
     this.dal.select(this.eventId)
       .then((data)=>{
         this.event = data;
+        return this.geoService.getLocationByAddress(this.event.location);
+      })
+      .then((data) => {
+        console.log(data);
       })
       .catch((err)=>{
         console.log(err);
