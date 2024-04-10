@@ -9,6 +9,8 @@ import {SessionUtilService} from "../../services/session-util.service";
 import {DalUserService} from "../../services/dal-user.service";
 import {GeoService} from "../../services/geo.service";
 
+declare const H: any;
+
 @Component({
   selector: 'app-eventshowpage',
   standalone: true,
@@ -25,6 +27,8 @@ export class EventshowpageComponent {
   currentDate: Date = new Date();
   dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
   event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, 0);
+  position: any;
+
   dal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
@@ -39,7 +43,8 @@ export class EventshowpageComponent {
         return this.geoService.getLocationByAddress(this.event.location);
       })
       .then((data) => {
-        console.log(data);
+        this.position = data[0].position;
+        this.showMap();
       })
       .catch((err)=>{
         console.log(err);
@@ -48,5 +53,38 @@ export class EventshowpageComponent {
   }
   onModifyClick(event: EventObject) {
     this.router.navigate([`/event/detail/${event.id}`]);
+  }
+
+  public showMap() {
+    console.log("showing map: ")
+    document.getElementById('mapContainer')!.innerHTML = '';
+
+    // Initialize the platform object:
+    var platform = this.geoService.hMapPlatform;
+
+    // Obtain the default map types from the platform object
+    var maptypes = platform.createDefaultLayers();
+
+    var options = {
+      zoom: 15,
+      center: {
+        lat: this.position.lat, lng: this.position.lng
+      }
+    };
+
+    // Instantiate (and display) a map object:
+    var map = new H.Map(
+      document.getElementById('mapContainer'),
+      maptypes.vector.normal.map,
+      options
+    );
+
+    var icon = new H.map.Icon('assets/img/map-pin.png');
+    var marker = new H.map.Marker({
+      lat: this.position.lat, lng: this.position.lng
+    }, {icon: icon});
+
+    // Add the marker to the map and center the map at the location of the marker:
+    map.addObject(marker);
   }
 }
