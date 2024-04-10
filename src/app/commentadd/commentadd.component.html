@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header text-center">
+      <h4>Add Comment</h4>
+    </div>
+    <div class="card-body">
+      <form #commentForm="ngForm">
+        <div class="mb-3">
+          <label for="txtComment">Comment:</label>
+          <textarea class="form-control" id="txtComment"
+                    name="txtComment"
+                    [(ngModel)]="comment.text"
+                    #commentText="ngModel"
+                    required></textarea>
+        </div>
+        <button type="button" id="btnAddComment" class="btn btn-primary"
+                [disabled]="commentForm.invalid"
+                (click)="onCreateCommentClick()">Add Comment</button>
+      </form>
+    </div>
+  </div>
+</div>

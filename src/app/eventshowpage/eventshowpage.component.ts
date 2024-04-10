@@ -8,17 +8,19 @@ import {User} from "../../models/user.model";
 import {SessionUtilService} from "../../services/session-util.service";
 import {DalUserService} from "../../services/dal-user.service";
 import {GeoService} from "../../services/geo.service";
+import {CommentaddComponent} from "../commentadd/commentadd.component";
 
 declare const H: any;
 
 @Component({
   selector: 'app-eventshowpage',
   standalone: true,
-    imports: [
-        FormsModule,
-        JsonPipe,
-        ReactiveFormsModule
-    ],
+  imports: [
+    FormsModule,
+    JsonPipe,
+    ReactiveFormsModule,
+    CommentaddComponent
+  ],
   templateUrl: './eventshowpage.component.html',
   styleUrl: './eventshowpage.component.css'
 })
