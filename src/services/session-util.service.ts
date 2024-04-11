@@ -3,6 +3,8 @@ import {DalUserService} from "./dal-user.service";
 import {DalLoginService} from "./dal-login.service";
 import {User} from "../models/user.model";
 import {Login} from "../models/login.model";
+import {DalEventService} from "./dal-event.service";
+import {EventObject} from "../models/event.model";
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +82,5 @@ export class SessionUtilService {
 
     sessionStorage.setItem('loggedIn', `${isLoggedIn}`)
   }
-
 
 }
