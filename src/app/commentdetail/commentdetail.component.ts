@@ -15,6 +15,7 @@ import {FormsModule} from "@angular/forms";
 export class CommentdetailComponent {
   @Output() onCloseEditForm: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onUpdateComment: EventEmitter<Comment> = new EventEmitter<Comment>();
+  @Output() onDeleteComment: EventEmitter<Comment> = new EventEmitter<Comment>();
 
   commentId: number = Number(localStorage.getItem('commentId'));
   currentUser: UserReference = new UserReference(
@@ -51,5 +52,19 @@ export class CommentdetailComponent {
 
   onCancelCommentClick() {
     this.onCloseEditForm.emit(false);
+  }
+
+  onDeleteCommentClick() {
+    let result = confirm("Are you sure you want to delete your comment?")
+
+    if (result) {
+      this.dalComment.delete(this.comment)
+        .then((data) => {
+          this.onDeleteComment.emit(this.comment)
+        })
+        .catch((err) => {
+
+        })
+    }
   }
 }

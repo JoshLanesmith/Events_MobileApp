@@ -3,6 +3,7 @@ import {DatabaseService} from "./database.service";
 import {Comment} from "../models/comment.model";
 import {EventObject} from "../models/event.model";
 import {Login} from "../models/login.model";
+import {User} from "../models/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -32,16 +33,17 @@ export class DalCommentService {
       reqAddComment.onsuccess = (event: any) => {
         //event.target.result ? resolve(event.target.result) : resolve(null);
 
-        console.log(event.target.result)
         if (!currentEvent.commentIds) {
           currentEvent.commentIds = [];
         }
+
+        let commentId: number = event.target.result as number;
         currentEvent.commentIds.push(event.target.result as number);
 
         const reqUpdateEvent = eventStore.put(currentEvent);
 
         reqUpdateEvent.onsuccess = (event: any) => {
-          event.target.result ? resolve(event.target.result) : resolve(null);
+          event.target.result ? resolve(commentId) : resolve(null);
         }
         reqUpdateEvent.onerror = (event: any) => {
           console.log("Error: error in update event while insert comment: " + event);
@@ -138,5 +140,34 @@ export class DalCommentService {
     })
   }
 
+  delete(comment: Comment): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['comments'], 'readwrite');
 
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: delete comment transaction successful")
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in delete comment transaction: " + event);
+        reject(event);
+      };
+
+      const commentStore = transaction.objectStore('comments');
+
+      console.log('about to attempt to delete user');
+
+      if (comment.id) {
+        const req = commentStore.delete(comment.id);
+
+        req.onsuccess = (event: any) => {
+          console.log('comment deleted');
+          event.target.result ? resolve(event.target.result) : resolve(null);
+
+        }
+      } else {
+        reject("comment does not have id")
+      }
+    })
+  }
 }

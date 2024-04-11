@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Comment, UserReference} from "../../models/comment.model";
 import {CommentdetailComponent} from "../commentdetail/commentdetail.component";
 
@@ -17,6 +17,7 @@ export class CommentshowComponent {
     String(sessionStorage.getItem('userName'))
   )
   @Input() comment: Comment = new Comment(this.currentUser, 0, 'this.dateString', '')
+  @Output() onDeleteComment: EventEmitter<Comment> = new EventEmitter<Comment>();
 
   editMode: boolean = false;
 
@@ -31,5 +32,9 @@ export class CommentshowComponent {
 
   updateComment(param: any) {
     this.comment = param;
+  }
+
+  deleteComment(param: any) {
+    this.onDeleteComment.emit(param);
   }
 }

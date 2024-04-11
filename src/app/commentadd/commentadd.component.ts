@@ -40,6 +40,8 @@ export class CommentaddComponent {
     this.comment.eventId = Number(this.currentEvent.id);
     this.dalComment.insert(this.comment, this.currentEvent)
       .then((data) => {
+        this.comment.id = data;
+        console.log(`Comment Id: ${this.comment.id}`)
         this.onCloseAddForm.emit(false);
         this.onAddNewCommentToList.emit(this.comment);
       })

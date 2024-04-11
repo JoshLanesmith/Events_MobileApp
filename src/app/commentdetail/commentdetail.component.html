@@ -7,10 +7,19 @@
               #commentText="ngModel"
               required></textarea>
   </div>
-  <button type="button" id="btnAddComment" class="btn btn-primary me-3"
-          [disabled]="commentForm.invalid"
-          (click)="onUpdateCommentClick()">Update</button>
 
-  <button type="button" id="btnCancelComment" class="btn btn-secondary"
-          (click)="onCancelCommentClick()">Cancel</button>
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" id="btnAddComment" class="btn btn-primary"
+            [disabled]="commentForm.invalid"
+            (click)="onUpdateCommentClick()">Update
+    </button>
+
+    <button type="button" id="btnCancelComment" class="btn btn-secondary"
+            (click)="onCancelCommentClick()">Cancel
+    </button>
+
+    <button type="button" id="btnDeleteComment" class="btn btn-danger"
+            (click)="onDeleteCommentClick()">Delete
+    </button>
+  </div>
 </form>

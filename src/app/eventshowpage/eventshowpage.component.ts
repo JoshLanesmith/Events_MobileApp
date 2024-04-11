@@ -126,4 +126,9 @@ export class EventshowpageComponent {
   addNewCommentToList(param: Comment) {
     this.comments.push(param);
   }
+
+  removeCommentFromList(param: Comment) {
+    let index = this.comments.indexOf(param);
+    this.comments.splice(index, 1);
+  }
 }

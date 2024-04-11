@@ -23,7 +23,7 @@
   <h4>Comments</h4>
   <div class="list-group mb-3">
     @for (comment of comments; track $index) {
-      <app-commentshow [comment]="comment"></app-commentshow>
+      <app-commentshow [comment]="comment" (onDeleteComment)="removeCommentFromList($event)"></app-commentshow>
     }
   </div>
 }
