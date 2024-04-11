@@ -1,11 +1,13 @@
 export class Comment {
   id: number | undefined;
+  eventId: number;
   user: UserReference;
   date: string;
   text: string;
 
-  constructor(user: UserReference, date: string, text: string) {
+  constructor(user: UserReference, eventId: number, date: string, text: string) {
     this.user = user;
+    this.eventId = eventId;
     this.date = date;
     this.text = text;
   }

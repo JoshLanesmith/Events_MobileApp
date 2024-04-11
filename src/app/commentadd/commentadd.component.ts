@@ -17,7 +17,8 @@ import {DalEventService} from "../../services/dal-event.service";
 })
 export class CommentaddComponent {
   @Input() currentEvent: EventObject = new EventObject("", "", "", "", 0, 0, 0);
-  @Output() onProcessComplete: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() onCloseAddForm: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() onAddNewCommentToList: EventEmitter<Comment> = new EventEmitter<Comment>();
 
   currentDate: Date = new Date();
   dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
@@ -31,23 +32,25 @@ export class CommentaddComponent {
   dalEvent = inject(DalEventService);
 
   constructor() {
-    this.comment = new Comment(this.currentUser, this.dateString, '')
+    this.comment = new Comment(this.currentUser, 0, this.dateString, '')
   }
 
   onCreateCommentClick() {
     console.log(this.currentEvent);
+    this.comment.eventId = Number(this.currentEvent.id);
     this.dalComment.insert(this.comment, this.currentEvent)
       .then((data) => {
-        this.onProcessComplete.emit(false);
+        this.onCloseAddForm.emit(false);
+        this.onAddNewCommentToList.emit(this.comment);
       })
       .catch((err) => {
         alert("Could not add comment due to system error")
-        this.onProcessComplete.emit(false);
+        this.onCloseAddForm.emit(false);
       })
 
   }
 
   onCancelCommentClick() {
-    this.onProcessComplete.emit(false);
+    this.onCloseAddForm.emit(false);
   }
 }

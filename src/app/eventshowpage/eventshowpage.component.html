@@ -19,9 +19,20 @@
   </div>
 </div>
 
-@if (showAddCommentForm){
+@if (comments.length > 0) {
+  <h4>Comments</h4>
+  <div class="list-group mb-3">
+    @for (comment of comments; track $index) {
+      <app-commentshow [comment]="comment"></app-commentshow>
+    }
+  </div>
+}
+
+@if (showAddCommentForm) {
   <div id="addCommentComp">
-    <app-commentadd [currentEvent]="event" (onProcessComplete)="processResult($event)"></app-commentadd>
+    <app-commentadd [currentEvent]="event"
+                    (onCloseAddForm)="closeAddForm($event)"
+                    (onAddNewCommentToList)="addNewCommentToList($event)"></app-commentadd>
   </div>
 } @else {
   <button type="button" id="btnShowAddComment" class="btn btn-primary btn-sm me-4"

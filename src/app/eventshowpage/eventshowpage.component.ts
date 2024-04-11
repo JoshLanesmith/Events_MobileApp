@@ -4,11 +4,13 @@ import {formatDate, JsonPipe} from "@angular/common";
 import {EventObject} from "../../models/event.model";
 import {DalEventService} from "../../services/dal-event.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../../models/user.model";
 import {SessionUtilService} from "../../services/session-util.service";
-import {DalUserService} from "../../services/dal-user.service";
 import {GeoService} from "../../services/geo.service";
 import {CommentaddComponent} from "../commentadd/commentadd.component";
+import {Comment} from "../../models/comment.model";
+import {DalCommentService} from "../../services/dal-comment.service";
+import {CommentshowComponent} from "../commentshow/commentshow.component";
+
 
 declare const H: any;
 
@@ -19,7 +21,8 @@ declare const H: any;
     FormsModule,
     JsonPipe,
     ReactiveFormsModule,
-    CommentaddComponent
+    CommentaddComponent,
+    CommentshowComponent
   ],
   templateUrl: './eventshowpage.component.html',
   styleUrl: './eventshowpage.component.css'
@@ -33,8 +36,10 @@ export class EventshowpageComponent {
   destination: any;
   currentLocation: any;
   showAddCommentForm: boolean = false;
+  comments: Comment[] = [];
 
   dal = inject(DalEventService);
+  dalComment = inject(DalCommentService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
   router = inject(Router);
@@ -62,6 +67,14 @@ export class EventshowpageComponent {
       .catch((err) => {
         console.log(err);
         this.router.navigate(['/error']);
+      })
+
+    this.dalComment.selectAllByEventId(this.eventId)
+      .then((data) => {
+        this.comments = data;
+      })
+      .catch((err) => {
+
       })
   }
 
@@ -106,7 +119,11 @@ export class EventshowpageComponent {
     this.showAddCommentForm = true;
   }
 
-  processResult(param: boolean) {
+  closeAddForm(param: boolean) {
     this.showAddCommentForm = param;
+  }
+
+  addNewCommentToList(param: Comment) {
+    this.comments.push(param);
   }
 }

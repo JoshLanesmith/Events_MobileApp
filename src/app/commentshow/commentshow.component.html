@@ -1,0 +1,10 @@
+<div class="list-group-item">
+  <h6 class="mb-1">User: {{ comment.user.userName }}</h6>
+  <p class="mb-1">{{ comment.text }}</p>
+  @if (comment.user.userId === currentUser.userId) {
+    <button type="button" id="btnEditComment" class="btn btn-primary btn-sm"
+            (click)="onEditCommentClick()">
+            Edit
+    </button>
+  }
+</div>

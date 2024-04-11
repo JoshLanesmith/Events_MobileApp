@@ -10,7 +10,8 @@ import {Login} from "../models/login.model";
 export class DalCommentService {
   database = inject(DatabaseService);
 
-  constructor() { }
+  constructor() {
+  }
 
   insert(comment: Comment, currentEvent: EventObject): Promise<any> {
     return new Promise<any>((resolve, reject) => {
@@ -32,7 +33,7 @@ export class DalCommentService {
         //event.target.result ? resolve(event.target.result) : resolve(null);
 
         console.log(event.target.result)
-        if (!currentEvent.commentIds){
+        if (!currentEvent.commentIds) {
           currentEvent.commentIds = [];
         }
         currentEvent.commentIds.push(event.target.result as number);
@@ -49,6 +50,42 @@ export class DalCommentService {
       }
       reqAddComment.onerror = (event: any) => {
         console.log("Error: error in insert comment: " + event);
+        reject(event);
+      }
+    })
+  }
+
+  selectAllByEventId(eventId: number): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(["comments"]);
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: selectAll transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in selectAll transaction: " + event);
+      };
+
+      const commentStore = transaction.objectStore("comments");
+
+      const commentCursor = commentStore.openCursor();
+
+      let comments: Comment[] = [];
+      commentCursor.onsuccess = (event: any) => {
+        const cursor = event.target.result;
+
+        if (cursor) {
+          if (cursor.value.eventId === eventId) {
+            comments.push(cursor.value);
+          }
+
+          cursor.continue();
+        } else {
+          resolve(comments);
+        }
+      }
+      commentCursor.onerror = (event: any) => {
+        console.log('Error: error in selectAll ' + event);
         reject(event);
       }
     })
