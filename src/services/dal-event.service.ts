@@ -185,6 +185,8 @@ export class DalEventService {
           }
         }
 
+        eventObject.guestCount = eventObject.registeredUserIds.length
+
         const updateReq = eventStore.put(eventObject);
         updateReq.onsuccess = (event: any) => {
           console.log(`Success: user(s) added to event with ID ${id}`);
