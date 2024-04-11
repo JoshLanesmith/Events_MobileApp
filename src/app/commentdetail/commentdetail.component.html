@@ -1,0 +1,25 @@
+<form #commentForm="ngForm">
+  <div class="mb-3">
+    <label for="txtComment">Comment:</label>
+    <textarea class="form-control" id="txtComment"
+              name="txtComment"
+              [(ngModel)]="comment.text"
+              #commentText="ngModel"
+              required></textarea>
+  </div>
+
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" id="btnAddComment" class="btn btn-primary"
+            [disabled]="commentForm.invalid"
+            (click)="onUpdateCommentClick()">Update
+    </button>
+
+    <button type="button" id="btnCancelComment" class="btn btn-secondary"
+            (click)="onCancelCommentClick()">Cancel
+    </button>
+
+    <button type="button" id="btnDeleteComment" class="btn btn-danger"
+            (click)="onDeleteCommentClick()">Delete
+    </button>
+  </div>
+</form>

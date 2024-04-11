@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {User} from "../models/user.model";
 import {Login} from "../models/login.model";
+import {EventObject} from "../models/event.model";
 
 @Injectable({
   providedIn: 'root'
@@ -76,10 +77,20 @@ export class DatabaseService {
           addUserRequest.onsuccess = (event: any) => {
             const userAdminId = event.target.result;
             const defaultAdminLogin = new Login(userAdminId, 'admin');
+            const defaultEvent: EventObject = new EventObject('Conestoga Event', '2024-04-12', '108 University Ave, Waterloo, ON',
+              'Event for all students', 100, 0, userAdminId);
 
             const addLoginRequest = loginStore.add(defaultAdminLogin);
             addLoginRequest.onsuccess = () => {
               console.log('Default admin login added successfully');
+
+              const addEventRequest = eventStore.add(defaultEvent);
+              addEventRequest.onsuccess = () => {
+                console.log('Default event added successfully');
+              }
+              addEventRequest.onerror = () => {
+                console.error('Error adding event');
+              }
             }
             addLoginRequest.onerror = () => {
               console.error('Default admin login added successfully');

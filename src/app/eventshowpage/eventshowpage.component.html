@@ -1,22 +1,49 @@
-<div class="m-4">
-  <div class="card">
-    <div class="card-header">
-      <h2>Event details</h2>
+<div class="card my-4">
+  <div class="card-header">
+    <h2>Event details</h2>
+  </div>
+  <div class="card-body">
+    <p><strong>Name: </strong>{{ event.name }}</p>
+    <p><strong>Date: </strong>{{ event.date }}</p>
+    <p><strong>Location: </strong>{{ event.location }}</p>
+    <div>
+      <div class="container" id="mapContainer" style="width: auto; height: 300px"></div>
     </div>
-    <div class="card-body">
-      <p><strong>Name: </strong>{{event.name}}</p>
-      <p><strong>Date: </strong>{{event.date}}</p>
-      <p><strong>Location: </strong>{{event.location}}</p>
-      <p><strong>Description: </strong>{{event.description}}</p>
-      <p><strong>Capacity: </strong>{{event.capacity}}</p>
-      <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
-              (click)="onModifyClick(event)">
-        Modify
-      </button>
-      <button type="button" id="btnRegister" class="btn btn-primary btn-sm me-4"
-              (click)="onRegisterClick(event)">
-        Register
-      </button>
-    </div>
+    <p><strong>Distance: </strong>{{ distance.toFixed(2) }} km</p>
+    <p><strong>Description: </strong>{{ event.description }}</p>
+    <p><strong>Capacity: </strong>{{ event.capacity }}</p>
+    <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
+            (click)="onModifyClick(event)">
+      Modify
+    </button>
+    <button type="button" id="btnRegister" class="btn btn-primary btn-sm me-4"
+            (click)="onRegisterClick(event)">
+      Register
+    </button>
   </div>
 </div>
+
+@if (comments.length > 0) {
+  <h4>Comments</h4>
+  <div class="list-group mb-3">
+    @for (comment of comments; track $index) {
+      <app-commentshow [comment]="comment" (onDeleteComment)="removeCommentFromList($event)"></app-commentshow>
+    }
+  </div>
+}
+
+@if (showAddCommentForm) {
+  <div id="addCommentComp">
+    <app-commentadd [currentEvent]="event"
+                    (onCloseAddForm)="closeAddForm($event)"
+                    (onAddNewCommentToList)="addNewCommentToList($event)"></app-commentadd>
+  </div>
+} @else {
+  <button type="button" id="btnShowAddComment" class="btn btn-primary btn-sm me-4"
+          (click)="onShowAddCommentClick()">
+    Add Comment
+  </button>
+}
+
+
+
