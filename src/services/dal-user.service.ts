@@ -33,7 +33,11 @@ export class DalUserService {
       req.onsuccess = (event: any) => {
         const login: Login = new Login(Number(event.target.result), pwd);
         loginStore.add(login);
-      }
+      };
+      req.onerror = (event: any) => {
+        console.log("Error: error in insert user: " + event);
+        reject(event);
+      };
 
     })
   }

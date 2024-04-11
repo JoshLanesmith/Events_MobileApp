@@ -32,6 +32,7 @@ export class EventshowpageComponent {
   distance: number = 0;
   destination: any;
   currentLocation: any;
+  showAddCommentForm: boolean = false;
 
   dal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
@@ -42,7 +43,7 @@ export class EventshowpageComponent {
   constructor() {
     this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
     this.dal.select(this.eventId)
-      .then((data)=>{
+      .then((data) => {
         this.event = data;
         return this.geoService.getLocationByAddress(this.event.location);
       })
@@ -58,11 +59,12 @@ export class EventshowpageComponent {
       .then((data) => {
         this.distance = data[0].sections[0].summary.length / 1000;
       })
-      .catch((err)=>{
+      .catch((err) => {
         console.log(err);
         this.router.navigate(['/error']);
       })
   }
+
   onModifyClick(event: EventObject) {
     this.router.navigate([`/event/detail/${event.id}`]);
   }
@@ -98,5 +100,13 @@ export class EventshowpageComponent {
 
     // Add the marker to the map and center the map at the location of the marker:
     map.addObject(marker);
+  }
+
+  onShowAddCommentClick() {
+    this.showAddCommentForm = true;
+  }
+
+  processResult(param: boolean) {
+    this.showAddCommentForm = param;
   }
 }

@@ -16,6 +16,9 @@
         <button type="button" id="btnAddComment" class="btn btn-primary"
                 [disabled]="commentForm.invalid"
                 (click)="onCreateCommentClick()">Add Comment</button>
+
+        <button type="button" id="btnCancelComment" class="btn btn-secondary"
+                (click)="onCancelCommentClick()">Cancel</button>
       </form>
     </div>
   </div>
