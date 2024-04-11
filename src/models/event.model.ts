@@ -7,6 +7,7 @@ export class EventObject {
   capacity: number = 0;
   guestCount: number = 0;
   adminId: number = 0;
+  registeredUserIds: number[] = [];
 
   constructor(name: string, date: string, location: string, description: string, capacity: number, guestCount: number, adminId: number) {
     this.name = name;

@@ -43,4 +43,15 @@ export class EventshowpageComponent {
   onModifyClick(event: EventObject) {
     this.router.navigate([`/event/detail/${event.id}`]);
   }
+  onRegisterClick(event: EventObject){
+    const userId = this.sessionUtil.getLoggedInUserID();
+    this.dal.addUserId(this.eventId, [userId]).then((data) => {
+      console.log(data);
+      alert("Registration was successful");
+    }).catch((err) => {
+      console.log(err);
+      alert("Failed to register: " + err);
+    });
+
+  }
 }

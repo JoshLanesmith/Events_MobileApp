@@ -89,9 +89,9 @@ export class DalEventService {
         console.log("Error: error in select transaction: " + event);
       };
 
-      const friendsStore = transaction.objectStore("events");
+      const eventStore = transaction.objectStore("events");
 
-      const req = friendsStore.get(id);
+      const req = eventStore.get(id);
       req.onsuccess = (event: any) => {
         event.target.result ? resolve(event.target.result) : resolve(null);
       };
@@ -157,5 +157,50 @@ export class DalEventService {
       }
 
     });
+
   }
+  addUserId(id: number, registeredUserIds: number[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.db.transaction(["events"], "readwrite");
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: addUserId transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in addUserId transaction: " + event);
+      };
+
+      const eventStore = transaction.objectStore("events");
+
+      const req = eventStore.get(id);
+
+      req.onsuccess = (event: any) => {
+        const eventObject = event.target.result;
+
+        eventObject.registeredUserIds = eventObject.registeredUserIds || [];
+
+        for (const userId of registeredUserIds) {
+          if (!eventObject.registeredUserIds.includes(userId)) {
+            eventObject.registeredUserIds.push(userId);
+          }
+        }
+
+        const updateReq = eventStore.put(eventObject);
+        updateReq.onsuccess = (event: any) => {
+          console.log(`Success: user(s) added to event with ID ${id}`);
+          resolve(event);
+        };
+        updateReq.onerror = (event: any) => {
+          console.log(`Error: failed to update event with ID ${id}: ${event}`);
+          reject(event);
+        };
+      };
+
+      req.onerror = (event: any) => {
+        console.log(`Error: failed to get event with ID ${id}: ${event}`);
+        reject(event);
+      };
+    });
+  }
+
 }
