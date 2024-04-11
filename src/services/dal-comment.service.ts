@@ -55,6 +55,30 @@ export class DalCommentService {
     })
   }
 
+  select(id: number): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['comments'], 'readonly');
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: select user transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in select user transaction: " + event);
+      };
+
+      const commentStore = transaction.objectStore('comments');
+
+      const req = commentStore.get(id);
+      req.onsuccess = (event: any) => {
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      req.onerror = (event: any) => {
+        console.log("Error: error in select user: " + event);
+        reject(event);
+      };
+
+    })
+  }
+
   selectAllByEventId(eventId: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(["comments"]);
@@ -88,6 +112,29 @@ export class DalCommentService {
         console.log('Error: error in selectAll ' + event);
         reject(event);
       }
+    })
+  }
+
+  update(comment: Comment): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['comments'], 'readwrite');
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: update comment transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in update comment transaction: " + event);
+      };
+
+      const commentStore = transaction.objectStore('comments');
+
+      const req = commentStore.put(comment);
+      req.onsuccess = (event: any) => {
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      req.onerror = (event: any) => {
+        console.log("Error: error in update comment: " + event);
+        reject(event);
+      };
     })
   }
 

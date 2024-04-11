@@ -1,0 +1,16 @@
+<form #commentForm="ngForm">
+  <div class="mb-3">
+    <label for="txtComment">Comment:</label>
+    <textarea class="form-control" id="txtComment"
+              name="txtComment"
+              [(ngModel)]="comment.text"
+              #commentText="ngModel"
+              required></textarea>
+  </div>
+  <button type="button" id="btnAddComment" class="btn btn-primary me-3"
+          [disabled]="commentForm.invalid"
+          (click)="onUpdateCommentClick()">Update</button>
+
+  <button type="button" id="btnCancelComment" class="btn btn-secondary"
+          (click)="onCancelCommentClick()">Cancel</button>
+</form>
