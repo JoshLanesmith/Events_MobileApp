@@ -10,12 +10,14 @@ import {UseraddpageComponent} from "./useraddpage/useraddpage.component";
 import {UsershowpageComponent} from "./usershowpage/usershowpage.component";
 import {UserdetailpageComponent} from "./userdetailpage/userdetailpage.component";
 import {SettingspageComponent} from "./settingspage/settingspage.component";
+import {UserlistpageComponent} from "./userlistpage/userlistpage.component";
 
 export const routes: Routes = [
   {path:"home", component:HomepageComponent},
   {path:"event/add", component:EventaddpageComponent},
   {path:"event/:id", component:EventshowpageComponent},
   {path:"event/detail/:id", component:EventdetailpageComponent},
+  {path:"event/:id/guests", component:UserlistpageComponent},
   {path:"events", component:EventslistpageComponent},
   {path:"login", component:LoginpageComponent},
   {path:"user/add", component:UseraddpageComponent},

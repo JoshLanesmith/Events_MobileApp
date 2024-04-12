@@ -1,3 +1,4 @@
+<script src="eventshowpage.component.ts"></script>
 <div class="card my-4">
   <div class="card-header">
     <h2>Event details</h2>
@@ -12,14 +13,25 @@
     <p><strong>Distance: </strong>{{ distance.toFixed(2) }} km</p>
     <p><strong>Description: </strong>{{ event.description }}</p>
     <p><strong>Capacity: </strong>{{ event.capacity }}</p>
-    <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
-            (click)="onModifyClick(event)">
-      Modify
-    </button>
-    <button type="button" id="btnRegister" class="btn btn-primary btn-sm me-4"
-            (click)="onRegisterClick(event)">
-      Register
-    </button>
+    <p><strong>Guests: </strong>{{ event.guestCount }}</p>
+    @if (currentUser === event.adminId) {
+      <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
+              (click)="onModifyClick(event)">
+        Modify
+      </button>
+    }
+    @if (!event.registeredUserIds.includes(currentUser)) {
+      <button type="button" id="btnRegister" class="btn btn-primary btn-sm me-4"
+              (click)="onRegisterClick(event)">
+        Register
+      </button>
+    }
+    @if (event.guestCount > 0) {
+      <button type="button" id="btnGuests" class="btn btn-primary btn-sm me-4"
+              (click)="onGuestsClick()">
+        View Guests
+      </button>
+    }
   </div>
 </div>
 

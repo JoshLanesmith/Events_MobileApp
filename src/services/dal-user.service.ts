@@ -88,6 +88,42 @@ export class DalUserService {
     })
   }
 
+  selectAll(listOfIds?: number[]): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(["users"]);
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: selectAll transaction successful");
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in selectAll transaction: " + event);
+      };
+
+      const userStore = transaction.objectStore('users');
+      const userCursor = userStore.openCursor();
+
+      let users: User[] = [];
+      userCursor.onsuccess = (event: any) => {
+        const cursor = event.target.result;
+
+        if (cursor) {
+          if (!listOfIds || listOfIds.includes(cursor.value.id)) {
+            users.push(cursor.value);
+          }
+
+          cursor.continue();
+        } else {
+          resolve(users);
+        }
+      }
+      userCursor.onerror = (event: any) => {
+        console.log('Error: error in selectAll ' + event);
+        reject(event);
+      }
+
+    })
+  }
+
   update(user: User): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(['users'], 'readwrite');

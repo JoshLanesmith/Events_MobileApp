@@ -35,6 +35,7 @@ export class EventshowpageComponent {
   distance: number = 0;
   destination: any;
   currentLocation: any;
+  currentUser: number = Number(sessionStorage.getItem('userId'));
   showAddCommentForm: boolean = false;
   comments: Comment[] = [];
 
@@ -141,5 +142,9 @@ export class EventshowpageComponent {
   removeCommentFromList(param: Comment) {
     let index = this.comments.indexOf(param);
     this.comments.splice(index, 1);
+  }
+
+  onGuestsClick() {
+    this.router.navigate([`/event/${this.event.id}/guests`]);
   }
 }

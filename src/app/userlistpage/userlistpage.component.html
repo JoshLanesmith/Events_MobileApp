@@ -1,0 +1,11 @@
+<h4 class="mt-4">Guests</h4>
+<div class="list-group my-3">
+  @for (user of users; track $index){
+    <div class="list-group-item">
+      <h6>User: {{ user.userName }}</h6>
+    </div>
+  }
+</div>
+<button type="button" id="btnBack" class="btn btn-primary" (click)="onBackClick()">
+  Back to Event
+</button>
