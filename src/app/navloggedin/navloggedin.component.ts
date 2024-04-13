@@ -12,7 +12,7 @@ import {SessionUtilService} from "../../services/session-util.service";
   styleUrl: './navloggedin.component.css'
 })
 export class NavloggedinComponent {
-  title: string = "Events App";
+  title: string = "Event Horizon";
   sessionUtil = inject(SessionUtilService);
   userId: number;
 

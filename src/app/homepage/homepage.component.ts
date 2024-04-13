@@ -15,4 +15,8 @@ export class HomepageComponent {
   onLoginClick() {
     this.router.navigate(['/login']);
   }
+
+  onCreateAccountClick() {
+    this.router.navigate(['/user/add']);
+  }
 }

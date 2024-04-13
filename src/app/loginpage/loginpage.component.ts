@@ -43,4 +43,8 @@ export class LoginpageComponent {
         this.showFailedLoginMessage = true;
       })
   }
+
+  onCreateAccountClick() {
+    this.router.navigate(['/user/add']);
+  }
 }

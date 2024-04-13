@@ -11,6 +11,6 @@ import {RouterLink} from "@angular/router";
   styleUrl: './navpublic.component.css'
 })
 export class NavpublicComponent {
-  title: string = "Events App";
+  title: string = "Event Horizon";
 
 }
