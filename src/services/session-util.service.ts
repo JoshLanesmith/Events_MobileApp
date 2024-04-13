@@ -12,7 +12,7 @@ import {EventObject} from "../models/event.model";
 export class SessionUtilService {
   userDal = inject(DalUserService);
   loginDal = inject(DalLoginService);
-  user: User = new User("", "", "", "", "", "", 1);
+  user: User = new User("", "", "", "", "", "", "");
   login: Login = new Login(0, '');
 
   getLoginSessionValue(): boolean {
@@ -41,6 +41,7 @@ export class SessionUtilService {
             userLoggedIn = true;
             sessionStorage.setItem('userName', userName);
             sessionStorage.setItem('userId', `${this.user.id}`);
+            sessionStorage.setItem('userRole', `${this.user.role}`);
 
           } else {
             userLoggedIn = false;
@@ -64,6 +65,7 @@ export class SessionUtilService {
     sessionStorage.setItem('loggedIn', `false`);
     sessionStorage.removeItem('userName');
     sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('userRole');
   }
 
   constructor() {

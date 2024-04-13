@@ -19,7 +19,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class UserdetailpageComponent {
 
   userId: number;
-  user: User = new User("", "","", "", "", "", 1);
+  user: User = new User("", "","", "", "", "", "");
   userDal = inject(DalUserService);
   sessionUtil = inject(SessionUtilService);
   activatedRoute = inject(ActivatedRoute);

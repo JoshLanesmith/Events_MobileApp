@@ -18,7 +18,7 @@ import {Router} from "@angular/router";
   styleUrl: './loginpage.component.css'
 })
 export class LoginpageComponent {
-  user: User = new User("", "", "", "", "", "", 1);
+  user: User = new User("", "", "", "", "", "", "");
   login: Login = new Login(0, '');
   userDal = inject(DalUserService);
   loginDal = inject(DalLoginService);

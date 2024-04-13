@@ -81,7 +81,7 @@ export class DalCommentService {
     })
   }
 
-  selectAllByEventId(eventId: number): Promise<any> {
+  selectAllByEventId(eventId?: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const transaction = this.database.db.transaction(["comments"]);
 
@@ -101,7 +101,7 @@ export class DalCommentService {
         const cursor = event.target.result;
 
         if (cursor) {
-          if (cursor.value.eventId === eventId) {
+          if (!eventId || cursor.value.eventId === eventId) {
             comments.push(cursor.value);
           }
 
@@ -145,8 +145,7 @@ export class DalCommentService {
       const transaction = this.database.db.transaction(['comments'], 'readwrite');
 
       transaction.oncomplete = (event: any) => {
-        console.log("Success: delete comment transaction successful")
-        event.target.result ? resolve(event.target.result) : resolve(null);
+        console.log("Success: delete comment transaction successful");
       };
       transaction.onerror = (event: any) => {
         console.log("Error: error in delete comment transaction: " + event);
@@ -167,6 +166,33 @@ export class DalCommentService {
         }
       } else {
         reject("comment does not have id")
+      }
+    })
+  }
+
+  deleteAll(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['comments'], 'readwrite');
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: delete all comments transaction successful")
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in delete all comments transaction: " + event);
+      };
+
+      const commentStore = transaction.objectStore('comments');
+
+      const req = commentStore.clear();
+
+      req.onsuccess = (event: any) => {
+        console.log('all comments deleted');
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      }
+      req.onerror = (event: any) => {
+        console.log('error in deleting comments');
+        reject(event);
       }
     })
   }

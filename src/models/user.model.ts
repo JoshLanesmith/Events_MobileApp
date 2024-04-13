@@ -7,12 +7,12 @@ export class User {
   dob: string = "";
   email: string = "";
   mobileNumber: string = "";
-  role: number | undefined;
+  role: string | undefined;
   eventsRegisteredFor: EventReference[] = [];
   eventsHosted: EventReference[] = [];
 
   constructor(firstName: string, lastName: string, userName: string, dob: string,
-              email: string, mobileNumber: string, role: number) {
+              email: string, mobileNumber: string, role: string) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.userName = userName;

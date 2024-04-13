@@ -17,7 +17,7 @@ import {CameraService} from "../../services/camera.service";
   styleUrl: './useraddpage.component.css'
 })
 export class UseraddpageComponent {
-  user: User = new User("", "","", "", "", "", 1);
+  user: User = new User("", "","", "", "", "", "");
   pwd: string = "";
   confirmPwd: string = "";
   userDal = inject(DalUserService);

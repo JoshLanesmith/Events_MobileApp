@@ -187,4 +187,38 @@ export class DalUserService {
       }
     })
   }
+
+  deleteAll(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['users', 'logins'], 'readwrite');
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: delete all comments transaction successful")
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in delete all comments transaction: " + event);
+      };
+
+      const userStore = transaction.objectStore('users');
+      const loginStore = transaction.objectStore('logins');
+
+      const userReq = userStore.clear();
+
+      console.log('user deleted');
+
+      userReq.onsuccess = (event: any) => {
+        let loginReq = loginStore.clear();
+
+        loginReq.onsuccess = (event: any) => {
+          console.log('all users deleted');
+          event.target.result ? resolve(event.target.result) : resolve(null);
+        }
+        loginReq.onerror = (event: any) => {
+          console.log('error in deleting users');
+          reject(event);
+        }
+      }
+    })
+  }
+
 }

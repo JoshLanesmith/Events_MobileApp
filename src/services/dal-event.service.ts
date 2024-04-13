@@ -205,4 +205,31 @@ export class DalEventService {
     });
   }
 
+  deleteAll(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const transaction = this.database.db.transaction(['events'], 'readwrite');
+
+      transaction.oncomplete = (event: any) => {
+        console.log("Success: delete all events transaction successful")
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      };
+      transaction.onerror = (event: any) => {
+        console.log("Error: error in delete all events transaction: " + event);
+      };
+
+      const eventStore = transaction.objectStore('events');
+
+      const req = eventStore.clear();
+
+      req.onsuccess = (event: any) => {
+        console.log('all events deleted');
+        event.target.result ? resolve(event.target.result) : resolve(null);
+      }
+      req.onerror = (event: any) => {
+        console.log('error in deleting events');
+        reject(event);
+      }
+    })
+  }
+
 }

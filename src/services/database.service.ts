@@ -65,40 +65,36 @@ export class DatabaseService {
         userTypesStore.createIndex("typesIndex", "type", {unique: true});
         loginStore.createIndex('userIdIndex', 'userId', {unique: true});
 
-        // Identify 'admin' object and create default admin user
-        const userTypeRequest = userTypesStore.index('typesIndex').get('admin');
-        userTypeRequest.onsuccess = (event: any) => {
-          const userTypeAdmin = event.target.result;
-          // Create default admin user
-          const defaultAdminUser = new User('admin', 'admin', 'admin', '', '', '', userTypeAdmin.id);
 
-          // Add default admin user to userStore
-          const addUserRequest = userStore.add(defaultAdminUser);
-          addUserRequest.onsuccess = (event: any) => {
-            const userAdminId = event.target.result;
-            const defaultAdminLogin = new Login(userAdminId, 'admin');
-            const defaultEvent: EventObject = new EventObject('Conestoga Event', '2024-04-12', '108 University Ave, Waterloo, ON',
-              'Event for all students', 100, 0, userAdminId);
+        // Create default admin user
+        const defaultAdminUser = new User('admin', 'admin', 'admin', '', '', '', this.userTypesData[1].type);
 
-            const addLoginRequest = loginStore.add(defaultAdminLogin);
-            addLoginRequest.onsuccess = () => {
-              console.log('Default admin login added successfully');
+        // Add default admin user to userStore
+        const addUserRequest = userStore.add(defaultAdminUser);
+        addUserRequest.onsuccess = (event: any) => {
+          const userAdminId = event.target.result;
+          const defaultAdminLogin = new Login(userAdminId, 'admin');
+          const defaultEvent: EventObject = new EventObject('Conestoga Event', '2024-04-12', '108 University Ave, Waterloo, ON',
+            'Event for all students', 100, 0, userAdminId);
 
-              const addEventRequest = eventStore.add(defaultEvent);
-              addEventRequest.onsuccess = () => {
-                console.log('Default event added successfully');
-              }
-              addEventRequest.onerror = () => {
-                console.error('Error adding event');
-              }
+          const addLoginRequest = loginStore.add(defaultAdminLogin);
+          addLoginRequest.onsuccess = () => {
+            console.log('Default admin login added successfully');
+
+            const addEventRequest = eventStore.add(defaultEvent);
+            addEventRequest.onsuccess = () => {
+              console.log('Default event added successfully');
             }
-            addLoginRequest.onerror = () => {
-              console.error('Default admin login added successfully');
+            addEventRequest.onerror = () => {
+              console.error('Error adding event');
             }
           }
-          addUserRequest.onerror = () => {
-            console.error('Error adding default admin user');
+          addLoginRequest.onerror = () => {
+            console.error('Default admin login added successfully');
           }
+        }
+        addUserRequest.onerror = () => {
+          console.error('Error adding default admin user');
         }
       }
     })
