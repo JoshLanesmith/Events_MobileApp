@@ -50,7 +50,7 @@ export class GeoService {
       geocoder.geocode(
         options,
         (data: any) => {
-          resolve(data.items);
+          resolve(data.items[0].position);
         },
         (err: any) => {
           reject('Can\'t reach the remote server to get location');
@@ -80,7 +80,7 @@ export class GeoService {
         routingParameters,
         (data: any) => {
           if (data.routes.length){
-            resolve(data.routes);
+            resolve(data.routes[0].sections[0].summary.length);
           }
           else {
             reject('Can\'t calculate route')

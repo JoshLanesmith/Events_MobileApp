@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {DalEventService} from "../../services/dal-event.service";
 import {Router} from "@angular/router";
 import {EventObject} from "../../models/event.model";
+import {GeoService} from "../../services/geo.service";
 
 @Component({
   selector: 'app-eventslistpage',
@@ -15,19 +16,38 @@ export class EventslistpageComponent {
 
   dal = inject(DalEventService)
   router = inject(Router)
+  geoService = inject(GeoService);
 
   constructor() {
     this.showAll()
   }
 
   showAll() {
-    this.dal.selectAll().then((data) => {
-      this.events = data;
-      console.log(this.events)
-    }).catch((err) => {
-      console.log(err);
-      this.events = [];
-    })
+    this.dal.selectAll()
+      .then((data) => {
+        this.events = data;
+        console.log(this.events)
+        return this.geoService.getCurrentLocation();
+      })
+      .then((data) => {
+        const currentLocation = data;
+        this.events.forEach((event) => {
+          this.geoService.getLocationByAddress(event.location)
+            .then((data) => {
+              console.log('does this work?')
+              return this.geoService.getRoute('fast', 'car', currentLocation, data)
+            })
+            .then((data) => {
+              let index = this.events.indexOf(event);
+              this.events[index].distance = data / 1000;
+            })
+            .catch((err) => {})
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+        this.events = [];
+      })
   }
 
   onShowClick(event: EventObject) {

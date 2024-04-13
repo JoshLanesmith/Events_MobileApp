@@ -1,24 +1,22 @@
-<div class="m-4">
-  <div class="card">
-    <div class="card-header">
-      <h2>List of events</h2>
-    </div>
-    <div class="card-body">
-      <ul class="list-group">
-        @for (event of events;track $index) {
-          <li class="list-group-item">
-            {{ event.name }}<br>
-            {{ event.date }}<br>
-            {{ event.location }}<br>
-            <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
-                    (click)="onShowClick(event)">
-              Select
-            </button>
-          </li>
-        } @empty {
-          <h4>No events found</h4>
+<div class="mt-4">
+  <h2>List of events</h2>
+  <ul class="list-group">
+    @for (event of events; track $index) {
+      <li class="list-group-item">
+        Event: {{ event.name }}<br>
+        Date: {{ event.date }}<br>
+        Location: {{ event.location }}<br>
+        @if (event.distance) {
+          Distance: {{ event.distance.toFixed(2) }} km<br>
         }
-      </ul>
-    </div>
-  </div>
+        <button type="button" id="btnSelect" class="btn btn-primary btn-sm me-4"
+                (click)="onShowClick(event)">
+          Select
+        </button>
+      </li>
+    } @empty {
+      <h4>No events found</h4>
+    }
+  </ul>
 </div>
+

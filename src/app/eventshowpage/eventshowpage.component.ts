@@ -54,7 +54,7 @@ export class EventshowpageComponent {
         return this.geoService.getLocationByAddress(this.event.location);
       })
       .then((data) => {
-        this.destination = data[0].position;
+        this.destination = data;
         this.showMap('mapContainer', this.destination);
         return this.geoService.getCurrentLocation();
       })
@@ -63,7 +63,7 @@ export class EventshowpageComponent {
         return this.geoService.getRoute('fast', 'car', this.currentLocation, this.destination);
       })
       .then((data) => {
-        this.distance = data[0].sections[0].summary.length / 1000;
+        this.distance = data / 1000;
       })
       .catch((err) => {
         console.log(err);

@@ -9,6 +9,7 @@ export class EventObject {
   adminId: number = 0;
   registeredUserIds: number[] = [];
   commentIds: number[] = [];
+  distance: any | undefined
 
   constructor(name: string, date: string, location: string, description: string, capacity: number, guestCount: number, adminId: number) {
     this.name = name;
