@@ -40,7 +40,9 @@
         <button class="btn btn-secondary container-fluid" (click)="onLoadFromLibraryClick()">Load from PhotoLibrary
         </button>
         <div class="m-3"></div>
-        <img [src]="user.profileImg" width="80%" alt="Image placeholder">
+        @if (user.profileImg) {
+          <img [src]="user.profileImg" width="80%" alt="Image placeholder">
+        }
       </div>
 
       <div class="mb-3">

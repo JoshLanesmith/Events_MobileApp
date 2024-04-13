@@ -5,6 +5,7 @@ import {User} from "../../models/user.model";
 import {DalUserService} from "../../services/dal-user.service";
 import {SessionUtilService} from "../../services/session-util.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {CameraService} from "../../services/camera.service";
 
 @Component({
   selector: 'app-userdetailpage',
@@ -23,6 +24,7 @@ export class UserdetailpageComponent {
   userDal = inject(DalUserService);
   sessionUtil = inject(SessionUtilService);
   activatedRoute = inject(ActivatedRoute);
+  cameraService = inject(CameraService);
 
   MIN_LENGTH: number = 5;
 
@@ -72,5 +74,25 @@ export class UserdetailpageComponent {
 
   onCandelUpdateUserClick() {
     this.router.navigate([`/user/${this.userId}/profile`])
+  }
+
+  onLoadFromLibraryClick() {
+    this.cameraService.loadPhotoFromLibrary()
+      .then((data) => {
+        this.user.profileImg = data;
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+  }
+
+  onCapturePhotoClick() {
+    this.cameraService.capturePhoto()
+      .then((data) => {
+        this.user.profileImg = data;
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
   }
 }

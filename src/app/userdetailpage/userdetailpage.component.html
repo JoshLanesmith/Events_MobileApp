@@ -37,6 +37,17 @@
         </div>
 
         <div class="mb-3">
+          <button class="btn btn-primary container-fluid" (click)="onCapturePhotoClick()">Capture photo</button>
+          <div class="m-3"></div>
+          <button class="btn btn-secondary container-fluid" (click)="onLoadFromLibraryClick()">Load from PhotoLibrary
+          </button>
+          <div class="m-3"></div>
+          @if (user.profileImg) {
+            <img [src]="user.profileImg" width="80%" alt="Image placeholder">
+          }
+        </div>
+
+        <div class="mb-3">
           <label for="txtUserName">Username:*</label>
           <input type="text" class="form-control" id="txtUserName"
                  name="txtUserName"
@@ -108,12 +119,10 @@
                 (click)="onUpdateUserClick()">Update
         </button>
         <button type="button" id="btnCandelUpdate" class="btn btn-secondary"
-                [disabled]="userForm.invalid"
-                (click)="onCandelUpdateUserClick()">Update
+                (click)="onCandelUpdateUserClick()">Cancel
         </button>
 
         <button type="button" id="btnDeleteUser" class="btn btn-danger"
-                [disabled]="userForm.invalid"
                 (click)="onDeleteUserClick()">Delete
         </button>
       </div>
