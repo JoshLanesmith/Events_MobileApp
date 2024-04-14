@@ -83,11 +83,11 @@ export class GeoService {
             resolve(data.routes[0].sections[0].summary.length);
           }
           else {
-            reject('Can\'t calculate route')
+            resolve('Can\'t calculate distance')
           }
         },
         (err: any) => {
-          reject('Can\'t calculate route')
+          reject('Can\'t calculate route 2')
         }
       );
     })

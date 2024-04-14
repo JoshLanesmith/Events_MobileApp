@@ -32,15 +32,15 @@ export class EventshowpageComponent {
   currentDate: Date = new Date();
   dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
   event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, 0);
-  distance: number = 0;
+  distance: any;
   destination: any;
   currentLocation: any;
   currentUser: number = Number(sessionStorage.getItem('userId'));
   showAddCommentForm: boolean = false;
   comments: Comment[] = [];
 
-  dal = inject(DalEventService);
-  dalComment = inject(DalCommentService);
+  eventDal = inject(DalEventService);
+  commentDal = inject(DalCommentService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
   router = inject(Router);
@@ -48,7 +48,7 @@ export class EventshowpageComponent {
 
   constructor() {
     this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
-    this.dal.select(this.eventId)
+    this.eventDal.select(this.eventId)
       .then((data) => {
         this.event = data;
         return this.geoService.getLocationByAddress(this.event.location);
@@ -63,19 +63,23 @@ export class EventshowpageComponent {
         return this.geoService.getRoute('fast', 'car', this.currentLocation, this.destination);
       })
       .then((data) => {
-        this.distance = data / 1000;
+        if (typeof data === 'number') {
+          this.distance = data / 1000;
+        } else {
+          this.distance = data;
+        }
       })
       .catch((err) => {
         console.log(err);
         this.router.navigate(['/error']);
       })
 
-    this.dalComment.selectAllByEventId(this.eventId)
+    this.commentDal.selectAllByEventId(this.eventId)
       .then((data) => {
         this.comments = data;
       })
       .catch((err) => {
-
+        console.log(err)
       })
   }
 
@@ -83,15 +87,60 @@ export class EventshowpageComponent {
     this.router.navigate([`/event/detail/${event.id}`]);
   }
 
-  onRegisterClick(event: EventObject) {
-    const userId = this.sessionUtil.getLoggedInUserID();
-    this.dal.addUserId(this.eventId, [userId]).then((data) => {
-      console.log(data);
-      alert("Registration was successful");
-    }).catch((err) => {
-      console.log(err);
-      alert("Failed to register: " + err);
-    });
+  onRegisterClick() {
+    if (this.event.guestCount >= this.event.capacity) {
+      alert('Sorry, this event is already full');
+      return;
+    }
+
+    const currentUserId: number = Number(sessionStorage.getItem('userId'));
+
+    if (this.event.registeredUserIds.includes(currentUserId))
+      return;
+
+    this.event.registeredUserIds.push(currentUserId)
+    this.event.guestCount++;
+
+    this.eventDal.update(this.event)
+      .then((data) => {
+
+      })
+      .catch((err) => {
+        alert('Error in registering for event');
+        const indexToRemove = this.event.registeredUserIds.indexOf(currentUserId)
+        this.event.registeredUserIds.splice(indexToRemove, 1);
+        this.event.guestCount--;
+      })
+  }
+
+  onUnregisterClick() {
+    const currentUserId: number = Number(sessionStorage.getItem('userId'));
+
+    if (!this.event.registeredUserIds.includes(currentUserId))
+      return;
+
+    const indexToRemove = this.event.registeredUserIds.indexOf(currentUserId)
+    this.event.registeredUserIds.splice(indexToRemove, 1);
+    this.event.guestCount--;
+
+    this.eventDal.update(this.event)
+      .then((data) => {
+
+      })
+      .catch((err) => {
+        alert('Error in unregistering for event');
+        this.event.registeredUserIds.push(currentUserId)
+        this.event.guestCount++;
+      })
+
+    // const userId = this.sessionUtil.getLoggedInUserID();
+    // this.dal.addUserId(this.eventId, [userId]).then((data) => {
+    //   console.log(data);
+    //   alert("Registration was successful");
+    // }).catch((err) => {
+    //   console.log(err);
+    //   alert("Failed to register: " + err);
+    // });
   }
 
   public showMap(elementId: string, location: any) {
@@ -146,5 +195,9 @@ export class EventshowpageComponent {
 
   onGuestsClick() {
     this.router.navigate([`/event/${this.event.id}/guests`]);
+  }
+
+  isDistanceNumber(): boolean {
+    return typeof this.distance === 'number';
   }
 }

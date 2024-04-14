@@ -15,9 +15,10 @@ import {EventObject} from "../../models/event.model";
   styleUrl: './eventaddpage.component.css'
 })
 export class EventaddpageComponent {
+  currentUserId: number = Number(sessionStorage.getItem('userId'))
   currentDate: Date = new Date();
   dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
-  event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, 0);
+  event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, this.currentUserId);
 
   dal = inject(DalEventService)
 
