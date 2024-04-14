@@ -36,7 +36,7 @@ export class DalEventService {
   }
   selectAll(): Promise<EventObject[]> {
     return new Promise((resolve, reject) => {
-      const transaction = this.database.db.transaction(["events"]);
+      const transaction = this.database.db.transaction(["events"], 'readonly');
 
       transaction.oncomplete = (event: any) => {
         console.log("Success: selectAll transaction successful");
@@ -130,9 +130,9 @@ export class DalEventService {
   }
 
 
-  delete(event: EventObject): Promise<any> {
+  delete(eventObject: EventObject): Promise<any> {
     return new Promise((resolve, reject) => {
-      const transaction = this.database.db.transaction(["events"], "readwrite");
+      const transaction = this.database.db.transaction(["events", "comments"], "readwrite");
 
       transaction.oncomplete = (event: any) => {
         console.log("Success: delete transaction successful");
@@ -141,19 +141,39 @@ export class DalEventService {
         console.log("Error: error in delete transaction: " + event);
       };
 
-      const eventStore = transaction.objectStore("event");
-      if (event.id) {
-        const reqDelete = eventStore.delete(event.id);
-        reqDelete.onsuccess = (event: any) => {
-          console.log(`Success: data deleted successfully: ${event}`);
-          resolve(event);
-        };
-        reqDelete.onerror = (event: any) => {
-          console.log(`Error: failed to delete: ${event}`);
-          reject(event);
-        };
+      const eventStore = transaction.objectStore("events");
+      const commentStore = transaction.objectStore("comments");
+
+      if (eventObject.id) {
+        const commentCursor = commentStore.openCursor();
+
+        commentCursor.onsuccess = (event: any) => {
+          const cursor = event.target.result != null ? event.target.result : false;
+
+          if (cursor) {
+            if (cursor.value.eventId){
+              const commentReq = cursor.delete();
+              commentReq.onerror = (event: any) => {
+                reject('Unable to delete comments');
+              }
+            }
+
+            cursor.continue();
+          } else {
+            const eventReq = eventStore.delete(eventObject.id);
+
+            eventReq.onsuccess = (event: any) => {
+              console.log(`Success: data deleted successfully: ${event}`);
+              resolve(event);
+            }
+            eventReq.onerror = (event: any) => {
+              console.log(`Error: failed to delete: ${event}`);
+              reject(event);
+            }
+          }
+        }
       } else {
-        reject("book does not have id")
+        reject("Event does not have id")
       }
 
     });
@@ -186,5 +206,4 @@ export class DalEventService {
       }
     })
   }
-
 }

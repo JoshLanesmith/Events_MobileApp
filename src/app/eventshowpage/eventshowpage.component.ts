@@ -71,7 +71,7 @@ export class EventshowpageComponent {
       })
       .catch((err) => {
         console.log(err);
-        this.router.navigate(['/error']);
+        // this.router.navigate(['/error']);
       })
 
     this.commentDal.selectAllByEventId(this.eventId)
@@ -132,15 +132,6 @@ export class EventshowpageComponent {
         this.event.registeredUserIds.push(currentUserId)
         this.event.guestCount++;
       })
-
-    // const userId = this.sessionUtil.getLoggedInUserID();
-    // this.dal.addUserId(this.eventId, [userId]).then((data) => {
-    //   console.log(data);
-    //   alert("Registration was successful");
-    // }).catch((err) => {
-    //   console.log(err);
-    //   alert("Failed to register: " + err);
-    // });
   }
 
   public showMap(elementId: string, location: any) {

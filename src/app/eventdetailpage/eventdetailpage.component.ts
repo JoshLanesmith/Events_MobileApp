@@ -22,14 +22,16 @@ export class EventdetailpageComponent {
   currentDate: Date = new Date();
   dateString: string = formatDate(this.currentDate, "yyyy-MM-dd", 'en-US').toString();
   event: EventObject = new EventObject("", this.dateString, "", "", 0, 0, 0);
-  dal = inject(DalEventService);
+  eventDal = inject(DalEventService);
   activatedRoute = inject(ActivatedRoute);
   sessionUtil = inject(SessionUtilService);
   router = inject(Router)
 
+  MIN_CAPACITY: number = 5;
+
   constructor() {
     this.eventId = Number(this.activatedRoute.snapshot.paramMap.get("id"));
-    this.dal.select(this.eventId)
+    this.eventDal.select(this.eventId)
       .then((data)=>{
         this.event = data;
       })
@@ -38,7 +40,7 @@ export class EventdetailpageComponent {
       })
   }
   onUpdateClick() {
-    this.dal.update(this.event)
+    this.eventDal.update(this.event)
       .then((data) => {
         console.log(data);
         alert("Record updated successfully");
@@ -48,5 +50,25 @@ export class EventdetailpageComponent {
       .catch((err) => {
         console.log(err);
       })
+  }
+
+  onCandelUpdateEventClick() {
+    this.router.navigate([`/event/${this.eventId}`])
+  }
+
+  onDeleteEventClick() {
+    let result = confirm("Are you sure you want to delete your event?")
+
+    if (result) {
+      console.log(this.event);
+      this.eventDal.delete(this.event)
+        .then((data) => {
+          this.router.navigate([`/events`]);
+        })
+        .catch((err) => {
+          console.log('event did not delete successfully');
+          console.log(err);
+        })
+    }
   }
 }

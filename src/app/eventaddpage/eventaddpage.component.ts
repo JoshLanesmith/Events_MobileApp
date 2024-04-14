@@ -22,6 +22,8 @@ export class EventaddpageComponent {
 
   dal = inject(DalEventService)
 
+  MIN_CAPACITY: number = 5;
+
   constructor() {
   }
 

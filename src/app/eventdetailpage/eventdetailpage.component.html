@@ -1,65 +1,97 @@
-<div class="m-4">
-  <div class="card">
-    <div class="card-header">
-      <h2>Add an event</h2>
+<div class="card mt-4">
+  <div class="card-header">
+    <h2>Edit Event</h2>
+  </div>
+  <div class="card-body">
+    <form #eventForm="ngForm">
+      <div class="mb-3">
+        <label for="txtName">Name:*</label>
+        <input id="txtName" type="text" class="form-control"
+               name="txtName"
+               [(ngModel)]="event.name"
+               #name="ngModel"
+               required
+        >
+        @if (name.invalid && (name.touched || name.dirty)) {
+          @if (name.errors?.['required']) {
+            <small class="text-danger">Name is required</small> <br>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="txtDate">Date:*</label>
+        <input id="txtDate" type="date" class="form-control"
+               name="txtDate"
+               [(ngModel)]="event.date"
+               #date="ngModel"
+               required
+        >
+        @if (date.invalid && (date.touched || date.dirty)) {
+          @if (date.errors?.['required']) {
+            <small class="text-danger">Date is required</small> <br>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="txtLocation">Location:*</label>
+        <input id="txtLocation" type="text" class="form-control"
+               name="txtLocation"
+               [(ngModel)]="event.location"
+               #location="ngModel"
+               required
+        >
+        @if (location.invalid && (location.touched || location.dirty)) {
+          @if (location.errors?.['required']) {
+            <small class="text-danger">Location is required</small> <br>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="txtDescription">Description</label>
+        <input id="txtDescription" type="text" class="form-control"
+               name="txtDescription"
+               [(ngModel)]="event.description"
+               #description="ngModel"
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="capacity">Capacity:*</label>
+        <input id="capacity" type="number" class="form-control"
+               name="capacity"
+               [(ngModel)]="event.capacity"
+               #capacity="ngModel"
+               required
+               [min]="MIN_CAPACITY"
+        >
+        @if (capacity.invalid && (capacity.touched || capacity.dirty)) {
+          @if (capacity.errors?.['required']) {
+            <small class="text-danger">Capacity is required</small> <br>
+          } @else if (capacity.errors?.['min']) {
+            <small class="text-danger">Capacity must be at least {{ MIN_CAPACITY }}</small> <br>
+          }
+        }
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-center">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" id="btnUpdateUser" class="btn btn-primary"
+              [disabled]="eventForm.invalid"
+              (click)="onUpdateClick()">Update
+      </button>
+      <button type="button" id="btnCandelUpdate" class="btn btn-secondary"
+              (click)="onCandelUpdateEventClick()">Cancel
+      </button>
+
+      <button type="button" id="btnDeleteUser" class="btn btn-danger"
+              (click)="onDeleteEventClick()">Delete
+      </button>
     </div>
-    <div class="card-body">
-      <form #eventForm="ngForm">
-        <div class="mb-3">
-          <label for="txtName">Name</label>
-          <input id="txtName" type="text" class="form-control"
-                 name="txtName" value="{{event.name}}"
-                 [(ngModel)]="event.name"
-                 #name="ngModel"
-          >
-        </div>
-
-        <div class="mb-3">
-          <label for="txtDate">Date</label>
-          <input id="txtDate" type="date" class="form-control"
-                 name="txtDate" value="{{event.date}}"
-                 [(ngModel)]="event.date"
-                 #date="ngModel"
-
-          >
-        </div>
-
-        <div class="mb-3">
-          <label for="txtLocation">Location</label>
-          <input id="txtLocation" type="text" class="form-control"
-                 name="txtLocation" value="{{event.location}}"
-                 [(ngModel)]="event.location"
-                 #date="ngModel"
-
-          >
-        </div>
-
-        <div class="mb-3">
-          <label for="txtDescription">Description</label>
-          <input id="txtDescription" type="text" class="form-control"
-                 name="txtDescription" value="{{event.description}}"
-                 [(ngModel)]="event.description"
-                 #date="ngModel"
-
-          >
-        </div>
-
-        <div class="mb-3">
-          <label for="capacity">Capacity</label>
-          <input id="capacity" type="text" class="form-control"
-                 name="capacity" value="{{event.capacity}}"
-                 [(ngModel)]="event.capacity"
-                 #date="ngModel"
-
-          >
-        </div>
-
-        <button type="button" id="btnAdd" class="btn btn-primary" (click)="onUpdateClick()">Update</button>
-      </form>
-    </div>
-    <!--    <div class="card-footer">-->
-    <!--      Form values: {{eventForm.value | json}}-->
-    <!--    </div>-->
   </div>
 </div>
+
 
