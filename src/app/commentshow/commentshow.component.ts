@@ -1,3 +1,10 @@
+/*
+Project: Event Horizon - Mobile Final Project
+Josh Lanesmith and Alex Philippopoulos
+
+Revision History:
+  Created: 2024-03-21
+ */
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Comment, UserReference} from "../../models/comment.model";
 import {CommentdetailComponent} from "../commentdetail/commentdetail.component";
@@ -35,6 +42,6 @@ export class CommentshowComponent {
   }
 
   deleteComment(param: any) {
-    this.onDeleteComment.emit(param);
+    this.onDeleteComment.emit(this.comment);
   }
 }

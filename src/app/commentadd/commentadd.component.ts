@@ -1,3 +1,11 @@
+/*
+Project: Event Horizon - Mobile Final Project
+Josh Lanesmith and Alex Philippopoulos
+
+Revision History:
+  Created: 2024-03-21
+ */
+
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {Comment, UserReference} from "../../models/comment.model";

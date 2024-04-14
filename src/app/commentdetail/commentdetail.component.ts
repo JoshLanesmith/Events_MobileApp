@@ -1,3 +1,10 @@
+/*
+Project: Event Horizon - Mobile Final Project
+Josh Lanesmith and Alex Philippopoulos
+
+Revision History:
+  Created: 2024-03-21
+ */
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {Comment, UserReference} from "../../models/comment.model";
 import {DalCommentService} from "../../services/dal-comment.service";
@@ -61,6 +68,7 @@ export class CommentdetailComponent {
       this.dalComment.delete(this.comment)
         .then((data) => {
           this.onDeleteComment.emit(this.comment)
+          this.onCloseEditForm.emit(false);
         })
         .catch((err) => {
 
