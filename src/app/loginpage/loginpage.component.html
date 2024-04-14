@@ -1,33 +1,37 @@
+<div class="card mt-4">
+  <div class="card-header text-center">
+    <h1>Login</h1>
+  </div>
+  <div class="card-body">
+    @if (showFailedLoginMessage) {
+      <div class="alert alert-danger" role="alert">
+        Failed login - Username and Password do not match
+      </div>
+    }
+    <form #userForm="ngForm">
+      <div class="mb-3">
+        <label for="txtUserName">Username:</label>
+        <input type="text" class="form-control" id="txtUserName"
+               name="txtUserName"
+               [(ngModel)]="user.userName"
+               #userName="ngModel">
+      </div>
 
-  <div class="card mt-4">
-    <div class="card-header text-center">
-      <h1>Login</h1>
-    </div>
-    <div class="card-body">
-      @if (showFailedLoginMessage){
-        <div class="alert alert-danger" role="alert">
-          Failed login - Username and Password do not match
-        </div>
-      }
-      <form #userForm="ngForm">
-        <div class="mb-3">
-          <label for="txtUserName">Username:</label>
-          <input type="text" class="form-control" id="txtUserName"
-                 name="txtUserName"
-                 [(ngModel)]="user.userName"
-                 #userName="ngModel">
-        </div>
-
-        <div class="mb-3">
-          <label for="txtPwd">Password:</label>
-          <input type="text" class="form-control" id="txtPwd"
+      <div class="mb-3">
+        <label for="txtPwd">Password:</label>
+        <div class="password-input-wrapper">
+          <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" id="txtPwd"
                  name="txtPwd"
                  [(ngModel)]="login.pwd"
                  #pwd="ngModel">
+          <i class="glyphicon bi" [ngClass]="{'bi-eye-slash': showPassword, 'bi-eye': !showPassword}" (click)="togglePasswordVisibility()"></i>
         </div>
-        <button type="button" id="btnLogin" class="btn btn-primary" (click)="onLoginClick()">Login</button>
-        <span class="mx-3">-or-</span>
-        <button type="button" id="btnCreateAccount" class="btn btn-secondary" (click)="onCreateAccountClick()">Create Account</button>
-      </form>
-    </div>
+      </div>
+      <button type="button" id="btnLogin" class="btn btn-primary" (click)="onLoginClick()">Login</button>
+      <span class="mx-3">-or-</span>
+      <button type="button" id="btnCreateAccount" class="btn btn-secondary" (click)="onCreateAccountClick()">Create
+        Account
+      </button>
+    </form>
   </div>
+</div>

@@ -6,13 +6,16 @@ import {DalUserService} from "../../services/dal-user.service";
 import {DalLoginService} from "../../services/dal-login.service";
 import {SessionUtilService} from "../../services/session-util.service";
 import {Router} from "@angular/router";
+import {NgClass} from "@angular/common";
+// import icons from 'glyphicons';
 
 @Component({
   selector: 'app-loginpage',
   standalone: true,
   imports: [
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgClass
   ],
   templateUrl: './loginpage.component.html',
   styleUrl: './loginpage.component.css'
@@ -23,6 +26,7 @@ export class LoginpageComponent {
   userDal = inject(DalUserService);
   loginDal = inject(DalLoginService);
   sessionUtil = inject(SessionUtilService);
+  showPassword: boolean = false;
 
   showFailedLoginMessage: boolean = false;
 
@@ -46,5 +50,9 @@ export class LoginpageComponent {
 
   onCreateAccountClick() {
     this.router.navigate(['/user/add']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }
