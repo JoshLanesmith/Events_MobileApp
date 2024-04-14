@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {User} from "../models/user.model";
 import {Login} from "../models/login.model";
 import {EventObject} from "../models/event.model";
+import {SeedData} from "../models/seed-data";
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +10,7 @@ import {EventObject} from "../models/event.model";
 export class DatabaseService {
 
   db: any;
-
-  userTypesData = [
-    {type: 'user'},
-    {type: 'admin'},
-  ];
-
+  seedData: SeedData = new SeedData();
 
   private createDatabase(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -57,45 +53,35 @@ export class DatabaseService {
           autoIncrement: true,
         });
 
-        this.userTypesData.forEach((item) => {
+        this.seedData.userTypesData.forEach((item) => {
           userTypesStore.add(item);
         });
+
+        this.seedData.users.forEach((item) => {
+          const req = userStore.add(item);
+          req.onsuccess = (event: any) => {
+            const userId = event.target.result;
+            const login: Login = new Login(userId, 'password');
+
+            loginStore.add(login);
+          }
+        })
+
+        this.seedData.addGuestsToEvents();
+
+        this.seedData.events.forEach((item) => {
+          eventStore.add(item);
+        })
+
+        this.seedData.comments.forEach((item) => {
+          commentStore.add(item);
+        })
+
 
         userStore.createIndex('userNameIndex', 'userName', {unique: true});
         userTypesStore.createIndex("typesIndex", "type", {unique: true});
         loginStore.createIndex('userIdIndex', 'userId', {unique: true});
 
-
-        // Create default admin user
-        const defaultAdminUser = new User('admin', 'admin', 'admin', '', '', '', this.userTypesData[1].type);
-
-        // Add default admin user to userStore
-        const addUserRequest = userStore.add(defaultAdminUser);
-        addUserRequest.onsuccess = (event: any) => {
-          const userAdminId = event.target.result;
-          const defaultAdminLogin = new Login(userAdminId, 'admin');
-          const defaultEvent: EventObject = new EventObject('Conestoga Event', '2024-04-12', '108 University Ave, Waterloo, ON',
-            'Event for all students', 100, 0, userAdminId);
-
-          const addLoginRequest = loginStore.add(defaultAdminLogin);
-          addLoginRequest.onsuccess = () => {
-            console.log('Default admin login added successfully');
-
-            const addEventRequest = eventStore.add(defaultEvent);
-            addEventRequest.onsuccess = () => {
-              console.log('Default event added successfully');
-            }
-            addEventRequest.onerror = () => {
-              console.error('Error adding event');
-            }
-          }
-          addLoginRequest.onerror = () => {
-            console.error('Default admin login added successfully');
-          }
-        }
-        addUserRequest.onerror = () => {
-          console.error('Error adding default admin user');
-        }
       }
     })
   }

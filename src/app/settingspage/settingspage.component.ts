@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {DalCommentService} from "../../services/dal-comment.service";
 import {DalEventService} from "../../services/dal-event.service";
 import {DalUserService} from "../../services/dal-user.service";
+import {User} from "../../models/user.model";
 
 @Component({
   selector: 'app-settingspage',
@@ -44,9 +45,7 @@ export class SettingspageComponent {
           }
         })
         .then((data) => {
-          if (data) {
-            alert('all events deleted successfully');
-          }
+          alert('all events deleted successfully');
         })
         .catch((err) => {
           alert('error in deleting all events')
@@ -67,9 +66,7 @@ export class SettingspageComponent {
           }
         })
         .then((data) => {
-          if (data) {
-            alert('all users deleted successfully');
-          }
+          alert('all users deleted successfully, except for \'admin\'');
         })
         .catch((err) => {
           alert('error in deleting all users')

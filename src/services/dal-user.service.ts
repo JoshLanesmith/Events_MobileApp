@@ -202,20 +202,39 @@ export class DalUserService {
       const userStore = transaction.objectStore('users');
       const loginStore = transaction.objectStore('logins');
 
-      const userReq = userStore.clear();
+      const userCursor = userStore.openCursor();
 
-      console.log('user deleted');
+      userCursor.onsuccess = (event: any) => {
+        const cursor = event.target.result != null ? event.target.result : false;
 
-      userReq.onsuccess = (event: any) => {
-        let loginReq = loginStore.clear();
+        if (cursor) {
+          if (cursor.value.id !== 1){
+            const userReq = cursor.delete();
+            userReq.onerror = (event: any) => {
+              reject('Unable to delete users');
+            }
+          }
 
-        loginReq.onsuccess = (event: any) => {
-          console.log('all users deleted');
-          event.target.result ? resolve(event.target.result) : resolve(null);
-        }
-        loginReq.onerror = (event: any) => {
-          console.log('error in deleting users');
-          reject(event);
+          cursor.continue();
+        } else {
+          const loginCursor = loginStore.openCursor();
+
+          loginCursor.onsuccess = (event: any) => {
+            const cursor2 = event.target.result != null ? event.target.result : false;
+
+            if (cursor2) {
+              if (cursor2.value.id !== 1){
+                const loginReq = cursor2.delete();
+                loginReq.onerror = (event: any) => {
+                  reject('Unable to delete users');
+                }
+              }
+
+              cursor2.continue();
+            } else {
+              resolve(1);
+            }
+          }
         }
       }
     })
