@@ -39,6 +39,7 @@
         <input id="txtLocation" type="text" class="form-control"
                name="txtLocation"
                [(ngModel)]="event.location"
+               (change)="locationError = undefined"
                #location="ngModel"
                required
         >
@@ -46,6 +47,8 @@
           @if (location.errors?.['required']) {
             <small class="text-danger">Location is required</small> <br>
           }
+        } @else if (locationError) {
+          <small class="text-danger">{{ locationError }}</small> <br>
         }
       </div>
 

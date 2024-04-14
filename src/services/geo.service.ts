@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 declare const H: any;
 
@@ -11,7 +11,8 @@ export class GeoService {
     'apikey': 'tEFQY8TgkjoQl1kDNuaWu6fV4BlcibtMLQvoqKak92A'
   });
 
-  constructor() { }
+  constructor() {
+  }
 
   getCurrentLocation(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
@@ -50,10 +51,19 @@ export class GeoService {
       geocoder.geocode(
         options,
         (data: any) => {
-          resolve(data.items[0].position);
+          if (data.items.length > 0) {
+            resolve(data.items[0].position);
+          } else {
+            let error = {
+              message: 'Invalid address: unable to identify location',
+              source: 'getLocationByAddress'
+            }
+            reject(error);
+          }
         },
         (err: any) => {
-          reject('Can\'t reach the remote server to get location');
+          err.message = 'Invalid address: unable to identify location'
+          reject(err);
         }
       );
 
@@ -79,10 +89,9 @@ export class GeoService {
       router.calculateRoute(
         routingParameters,
         (data: any) => {
-          if (data.routes.length){
+          if (data.routes.length) {
             resolve(data.routes[0].sections[0].summary.length);
-          }
-          else {
+          } else {
             resolve('Can\'t calculate distance')
           }
         },
